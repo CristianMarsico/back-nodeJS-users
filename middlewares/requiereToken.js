@@ -6,12 +6,15 @@ const jwt = require('jsonwebtoken')
 exports.requiereToken = (req, res, next) => {
     try {
 
+
+
         let token = req.headers?.authorization
         token = token.split(" ")[1];
         if (!token) {
             throw new Error("No Bearer")
         }
         let payload = jwt.verify(token, process.env.JWT_SECRET)
+
 
         //CREO PROPIEDADES NUEVAS AL REQ
         req.new_id = payload.id;
@@ -28,6 +31,6 @@ exports.requiereToken = (req, res, next) => {
             "No Bearer": "Se necesita formato Bearer",
             "jwt malformed": "J.W.T formato no valido",
         }
-        return res.status(401).send({ error: errorsToken[e.message] });
+        return res.status(401).json({ error: errorsToken[e.message] });
     }
 }

@@ -10,6 +10,8 @@ dontev.config({
     path: './env/.env'
 })
 
+require('./Scripts/tables.js')
+require('./reporte/reporte.js')
 const app = express()
 
 //HACEMOS USO DE LAS COOKIES
@@ -32,38 +34,23 @@ app.use(cors(
 )
 )
 
-
-
-
-
-
-//SETEAMOS CARPETA DE ARCHIVOS ESTATICOS
-//app.use(express.static('public'))
-
-//SETEAMOS EL MOTOR DE PLANTILLAS
-//app.set('view engine', 'ejs')
-
-
 //VAMOS A TRABAJAR CON JSON
 app.use(express.json())
-
-
 
     //PARA PROCESAR DATOS ENVIADOS DESDE FORMS
     .use(express.urlencoded({
         extended: true
     }))
 
-
-
 /*
 ROUTER
 */
-app.use('/api', require('./routes/router.js'))
-
+app.use('/api', require('./routes/authRouter.js'));
+app.use('/api', require('./routes/materiaPrimaRouter.js'));
+app.use('/api', require('./routes/compraRouter.js'));
 
 app.listen(3000, () => {
-    console.log("Escuchando en el puerto 3000")
+    console.log("👍👍👍 Escuchando en el puerto 3000");
 })
 
 

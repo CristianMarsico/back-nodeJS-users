@@ -2,14 +2,14 @@
 
 const conexion = require('../database/bd.js')
 
-exports.existsUserInBD = (req, res, next) => {
+exports.existsMateriaPrima = (req, res, next) => {
 
-    const name = req.body.nombre
-    const user = req.body.usuario
+    const { id } = req.params;
+    console.log(id)
 
 
-    let sql = 'SELECT * FROM usuario_1 WHERE nombre = ? AND usuario = ?'
-    conexion.query(sql, [name, user], (err, results) => {
+    let sql = 'SELECT * FROM materia_prima WHERE id = ?'
+    conexion.query(sql, [id], (err, results) => {
         try {
 
             if (err) { // un error indica que hubo problemas con la consulta
@@ -18,9 +18,9 @@ exports.existsUserInBD = (req, res, next) => {
                     error: 'Server error'
                 });
             }
-            if (results.length !== 0) { // Si el usuario no existe
+            if (results.length == 0) { // Si el usuario no existe
                 return res.status(200).json({
-                    message: 'El usuario existe en la base de datos'
+                    message: 'La Materia Prima NO existe en la base de datos'
                 });
             } else {
                 //next

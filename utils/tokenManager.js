@@ -16,13 +16,13 @@ exports.generateToken = (id, user, name) => {
 }
 
 exports.generateRefreshToken = (id, user, name, res) => {
-    let expiresIn = 60 * 3;
+    let expiresIn = 60 * 3; //60*60*24*30
     try {
         let refreshToken = jwt.sign({ id, user, name }, process.env.JWT_REFRESH, { expiresIn })
 
 
         res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
+
             secure: !(process.env.MODO === "developer"),
             expires: new Date(Date.now() + expiresIn * 1000)
         })

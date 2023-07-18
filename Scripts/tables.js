@@ -1,4 +1,5 @@
-const conexion = require('../database/bd.js')
+"use strict";
+const conexion = require('../database/bd.js');
 
 const usuario_1 = `
 CREATE TABLE IF NOT EXISTS usuario_1 (
@@ -58,21 +59,6 @@ const hilado = `
     )
   `;
 
-
-// const tr_control_stock_mp = `
-//   CREATE OR REPLACE TRIGGER tr_control_stock_mp
-//   BEFORE UPDATE ON materia_prima
-//   FOR EACH ROW
-//   BEGIN
-//     IF NEW.stock < 0 THEN
-//         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El stock no puede ser negativo';
-//     ELSEIF NEW.stock < OLD.stock THEN
-//         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El stock actual es inferior al stock a retirar';
-//     END IF;
-//   END;
-//   ;
-// `;
-
 const tr_compra_actualizarMateriaPrima = `
 
 CREATE OR REPLACE TRIGGER tr_compra_actualizarMateriaPrima 
@@ -86,18 +72,18 @@ BEGIN
   
   SELECT stock INTO stock_actual
   FROM materia_prima
-  WHERE nombre = NEW.producto;
+  WHERE nombre = LOWER(NEW.producto);
   
   IF stock_actual IS NULL THEN
     -- La materia prima no existe, se debe agregar
     INSERT INTO materia_prima (nombre, stock, precio)
-    VALUES (NEW.producto, cantidad, NEW.precio_unitario);
+    VALUES (LOWER(NEW.producto), cantidad, NEW.precio_unitario);
     
   ELSE
     -- La materia prima existe, se debe actualizar el stock
     UPDATE materia_prima
     SET stock = stock + cantidad
-    WHERE nombre = NEW.producto;
+    WHERE nombre = LOWER(NEW.producto);
     
   END IF;
 END;

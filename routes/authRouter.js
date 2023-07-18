@@ -59,7 +59,7 @@ router.get('/refreshToken', requireRefreshToken, authController.refreshToken)
 
 router.get('/logout', authController.logout)
 
-router.get('/reporteCompra', reporte.reporte)
+router.get('/reporteCompra/:fecha', reporte.reporte)
 
 
 module.exports = router

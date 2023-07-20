@@ -1,25 +1,24 @@
-const conexion = require('../database/bd.js')
+"use strict";
+const conexion = require('../database/bd.js');
+const { getCompraFecha } = require('../model/compra_model.js');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-exports.reporte = (req, res) => {
-
-    const { fecha } = req.params;
-    //CURDATE() -> DIA ACTUAL
-    // const consulta = 'SELECT * FROM compra WHERE DAY(CURDATE()) = 17 and MONTH(fecha)= MONTH(CURDATE()) -1';
-    const sql = 'SELECT * FROM compra WHERE MONTH(fecha) = ?';
-    conexion.query(sql, [fecha], (err, resultados) => {
-        if (err) {
-            return res.status(404).json({ error: 'Error al obtener las compras: ' });
-        }
-        if (resultados.length > 0) {
-            generarInforme(resultados, fecha);
+exports.reporte = (async (req, res) => {
+    try {
+        const { fecha } = req.params;
+        let respuesta = await getCompraFecha(fecha, conexion, res);
+        if (respuesta != null && respuesta.length > 0) {
+            generarInforme(respuesta, fecha);
             return res.status(200).json({ ok: 'informe de compras ha sido descargado' });
         }
-    });
-}
+        return res.status(404).json({ error: 'No hay compras en esa fecha' });
+    } catch (error) {
+        return res.status(500).json("Error de servidor")
+    }
+});
 
 function generarInforme(compras, fecha) {
     const doc = new PDFDocument();

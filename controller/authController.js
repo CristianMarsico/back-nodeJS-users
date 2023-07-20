@@ -2,6 +2,8 @@
 
 const bcrypt = require('bcryptjs');
 const conexion = require('../database/bd.js');
+const { addRol, verificarExistenciaRol } = require('../model/rol_model.js');
+const { getUserByNameAndUserName, addUser } = require('../model/userModel.js');
 const { generateToken, generateRefreshToken } = require('../utils/tokenManager.js');
 
 exports.register = (async (req, res) => {
@@ -19,20 +21,12 @@ exports.register = (async (req, res) => {
         }
 
         if (!tipoRol) {
-            let id_rol = await verificarExistenciaRol("default");
-
-            if (id_rol != null)
-                insertInBD(USUARIO, id_rol, res);
-            else
-                res.status(404).json('No existe ese rol en la base de datos');
+            let id_rol = await verificarExistenciaRol("default", conexion, res);
+            verificarYCrearUsuario(USUARIO, id_rol, conexion, res)
         }
         else {
-            let id_rol = await verificarExistenciaRol(tipoRol)
-
-            if (id_rol != null)
-                insertInBD(USUARIO, id_rol, res);
-            else
-                res.status(404).json('No existe ese rol en la base de datos');
+            let id_rol = await verificarExistenciaRol(tipoRol, conexion, res);
+            verificarYCrearUsuario(USUARIO, id_rol, conexion, res)
         }
     }
     catch (error) {
@@ -40,42 +34,33 @@ exports.register = (async (req, res) => {
     }
 })
 
-function insertInBD(USUARIO, id_rol, res) {
-    conexion.query('INSERT INTO usuario_1 SET ?', USUARIO, (error, results) => {
-        if (error) return res.json(error);
+const verificarYCrearUsuario = (async (USUARIO, id_rol, conexion, res) => {
 
-        // Obtiene el ID del usuario recién insertado
-        const usuarioId = results.insertId;
+    if (id_rol != null) {
+        let existsUser = await getUserByNameAndUserName(USUARIO.nombre, USUARIO.usuario, conexion, res);
+        if (existsUser != null) {
+            crearRol(existsUser[0].id, id_rol, conexion, res);
+            return res.status(201).json(`Rol creado exitosamente!`);
+        } else {
+            addUser(USUARIO, conexion, res);
+            let user = await getUserByNameAndUserName(USUARIO.nombre, USUARIO.usuario, conexion, res);
+            crearRol(user[0].id, id_rol, conexion, res);
+            return res.status(201).json(`Usuario y rol creados exitosamente!`);
+        }
+    }
+    else
+        res.status(404).json('No existe ese rol en la base de datos');
+});
 
+function crearRol(id_user, id_rol, conexion, res) {
+    if (id_user && id_rol) {
         const ROL = {
-            usuario_id: usuarioId,
+            usuario_id: id_user,
             rol_id: id_rol // ID del rol por defecto
         };
-        conexion.query('INSERT INTO usuarios_role_1 SET ?', ROL, (error) => {
-            if (error) {
-                console.error('Error al insertar el rol del usuario: ', error);
-                return;
-            }
-            res.status(201).json('Registro de usuario creado exitosamente');
-        });
-    });
+        addRol(ROL, conexion, res);
+    }
 }
-
-const verificarExistenciaRol = (rol) => {
-    return new Promise((resolve, reject) => {
-        const query = 'SELECT * FROM role_1 WHERE tipo = ?';
-        conexion.query(query, [rol], (error, results) => {
-            if (error)
-                reject(error);
-            else {
-                if (results.length > 0)
-                    resolve(results[0].id);
-                else
-                    resolve(null);
-            }
-        });
-    });
-};
 
 exports.login = (async (req, res) => {
 
@@ -83,7 +68,7 @@ exports.login = (async (req, res) => {
         const user = req.body.usuario
         const pass = req.body.pass
 
-        conexion.query('SELECT * FROM usuario_1 WHERE usuario = ?', [user], async (error, results) => {
+        conexion.query('SELECT * FROM usuario WHERE usuario = ?', [user], async (error, results) => {
             if (results.length == 0 || ! await bcrypt.compare(pass, results[0].pass)) {
                 if (error == null)
                     return res.status(403).json({ error: "usuario o password incorrecto" })
@@ -92,7 +77,7 @@ exports.login = (async (req, res) => {
             let { id, usuario, nombre, email } = results[0]
 
             let rol = []
-            const sql = 'SELECT r.tipo FROM usuarios_role_1 ur, role_1 r WHERE ur.rol_id = r.id AND ur.usuario_id = ?';
+            const sql = 'SELECT r.tipo FROM usuario_role ur, role r WHERE ur.rol_id = r.id AND ur.usuario_id = ?';
             conexion.query(sql, [id], (error, r) => {
                 if (error)
                     return res.json(error)

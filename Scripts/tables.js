@@ -1,8 +1,8 @@
 "use strict";
 const conexion = require('../database/bd.js');
 
-const usuario_1 = `
-CREATE TABLE IF NOT EXISTS usuario_1 (
+const usuario = `
+CREATE TABLE IF NOT EXISTS usuario (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL,
   pass VARCHAR(200) NOT NULL,
@@ -11,20 +11,20 @@ CREATE TABLE IF NOT EXISTS usuario_1 (
 )
 `;
 
-const role_1 = `
-CREATE TABLE IF NOT EXISTS role_1 (
+const role = `
+CREATE TABLE IF NOT EXISTS role (
   id INT AUTO_INCREMENT PRIMARY KEY,
   tipo VARCHAR(50)
 )
 `;
 
-const usuario_role_1 = `
-CREATE TABLE IF NOT EXISTS usuarios_role_1 (
+const usuario_role = `
+CREATE TABLE IF NOT EXISTS usuario_role (
   usuario_id INT,
   rol_id INT,
   PRIMARY KEY (usuario_id, rol_id),
-  FOREIGN KEY (usuario_id) REFERENCES usuario_1(id),
-  FOREIGN KEY (rol_id) REFERENCES role_1(id)
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id),
+  FOREIGN KEY (rol_id) REFERENCES role(id)
 )
 `;
 
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS compra(
 `;
 
 const hilado = `
-    CREATE TABLE IF NOT EXISTS producto (
+    CREATE TABLE IF NOT EXISTS hilado (
       id INT AUTO_INCREMENT PRIMARY KEY,
       producto_terminado VARCHAR(50) NOT NULL,
       stock_loberia INT NOT NULL,
@@ -59,8 +59,19 @@ const hilado = `
     )
   `;
 
-const tr_compra_actualizarMateriaPrima = `
+const venta = `
+  CREATE TABLE IF NOT EXISTS venta (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    producto_id INT NOT NULL,
+    cantidad_vendida INT NOT NULL,
+    precio DECIMAL(10, 2) NOT NULL,
+    stock_origen ENUM('stock_loberia', 'stock_buenosAires') NOT NULL,
+    tipo_venta ENUM('precio_venta_mayorista', 'precio_venta_minorista') NOT NULL,
+    FOREIGN KEY (producto_id) REFERENCES hilado(id)
+  )
+`;
 
+const tr_compra_actualizarMateriaPrima = `
 CREATE OR REPLACE TRIGGER tr_compra_actualizarMateriaPrima 
 AFTER INSERT ON compra
 FOR EACH ROW
@@ -90,22 +101,42 @@ END;
 ;
 `;
 
+const tr_descontar_stock_hilado = `
+CREATE OR REPLACE TRIGGER tr_descontar_stock_hilado 
+AFTER INSERT ON venta
+FOR EACH ROW
+BEGIN
+    IF NEW.stock_origen = 'stock_loberia' THEN
+        UPDATE hilado
+        SET stock_loberia = stock_loberia - NEW.cantidad_vendida
+        WHERE id = NEW.producto_id;
+    ELSEIF NEW.stock_origen = 'stock_buenosAires' THEN
+        UPDATE hilado
+        SET stock_buenosAires = stock_buenosAires - NEW.cantidad_vendida
+        WHERE id = NEW.producto_id;
+    END IF;
+END;
+`;
 
-createTables();
+createTablesAndTriggers();
 existsRoleInDataBase();
 
-function createTables() {
-  loadTables(usuario_1, "USUARIO");
-  loadTables(role_1, "ROL");
-  loadTables(usuario_role_1, "USUARIO_ROL");
-  loadTables(materia_Prima, "MATERIA PRIMA");
-  loadTables(compra, "COMPRA");
-  loadTables(hilado, "HILADO");
-  // loadTables(tr_control_stock_mp, "TR_CONTROL_STOCK_MATERIA_PRIMA");
-  loadTables(tr_compra_actualizarMateriaPrima, "TR_ACTUALIZAR_MATERIA_PRIMA");
+function createTablesAndTriggers() {
+  //CREACION DE TABLAS
+  load(usuario, "USUARIO");
+  load(role, "ROL");
+  load(usuario_role, "USUARIO_ROL");
+  load(materia_Prima, "MATERIA PRIMA");
+  load(compra, "COMPRA");
+  load(hilado, "HILADO");
+  load(venta, "VENTA");
+
+  //CREACION DE TRIGGERS
+  load(tr_compra_actualizarMateriaPrima, "TR_ACTUALIZAR_MATERIA_PRIMA");
+  load(tr_descontar_stock_hilado, "TR_DESCONTAR_STOCK_HILADO");
 }
 
-function loadTables(tabla, nombre) {
+function load(tabla, nombre) {
   conexion.query(tabla, (error, results) => {
     if (error) throw error;
     console.log(`Tabla ${nombre} ha sido creada exitosamente.`);
@@ -113,8 +144,8 @@ function loadTables(tabla, nombre) {
 }
 
 function existsRoleInDataBase() {
-  // Consulta para verificar si existen datos en la tabla role_1
-  const cantidad = 'SELECT COUNT(*) AS count FROM role_1';
+  // Consulta para verificar si existen datos en la tabla role
+  const cantidad = 'SELECT COUNT(*) AS count FROM role';
 
   // Ejecuta la consulta
   conexion.query(cantidad, (error, results) => {
@@ -126,7 +157,7 @@ function existsRoleInDataBase() {
 
     const count = results[0].count;
     if (count > 0) {
-      console.log('La tabla role_1 ya contiene datos.');
+      console.log('La tabla role ya contiene datos.');
       // conexion.end();
       return;
     }
@@ -145,7 +176,7 @@ function insertRole() {
   ];
 
   // Consulta SQL para insertar los datos
-  const query = 'INSERT INTO role_1 (tipo) VALUES ?';
+  const query = 'INSERT INTO role (tipo) VALUES ?';
 
   // Ejecutar la consulta con los datos
   conexion.query(query, [roles.map(dato => [dato.tipo])], (error, results) => {
@@ -158,4 +189,3 @@ function insertRole() {
     // conexion.end();
   });
 }
-

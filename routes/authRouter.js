@@ -33,8 +33,9 @@ router.post('/register',
 
     ],
     validatorReqExpress,
-    //existsUserInBD,
-    authController.register)
+    existsUserInBD,
+    authController.register);
+
 
 router.post('/login',
     [

@@ -4,13 +4,14 @@ const express = require('express')
 const cookie = require('cookie-parser')
 const dontev = require('dotenv')
 const cors = require('cors');
-
+// const fs = require('fs');
+const path = require('path');
 //SETEAMOS VARIABLES DE ENTORNO
 dontev.config({
     path: './env/.env'
 })
 
-require('./Scripts/tables.js')
+require('./scripts/tables.js')
 require('./reporte/reporte.js')
 const app = express()
 
@@ -42,6 +43,9 @@ app.use(express.json())
         extended: true
     }))
 
+app.use('/uploads', express.static('uploads'));
+
+
 /*
 ROUTER
 */
@@ -49,6 +53,8 @@ app.use('/api', require('./routes/authRouter.js'));
 app.use('/api', require('./routes/materiaPrimaRouter.js'));
 app.use('/api', require('./routes/compraRouter.js'));
 app.use('/api', require('./routes/ventaRouter.js'));
+app.use('/api', require('./routes/hiladoRouter.js'));
+app.use('/api', require('./routes/ImagenRouter.js'));
 
 app.listen(3000, () => {
     console.log("👍👍👍 Escuchando en el puerto 3000");

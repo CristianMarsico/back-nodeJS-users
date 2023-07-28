@@ -55,7 +55,20 @@ const hilado = `
       stock_loberia INT NOT NULL,
       stock_buenosAires INT NOT NULL,
       precio_venta_mayorista DECIMAL(10, 2) NOT NULL,
-      precio_venta_minorista DECIMAL(10, 2) NOT NULL
+      precio_venta_minorista DECIMAL(10, 2) NOT NULL,
+      nombre VARCHAR(100) NOT NULL,
+      ruta_archivo VARCHAR(255) NOT NULL,
+      descripcion VARCHAR(200)
+    )
+  `;
+
+const imagen = `
+    CREATE TABLE IF NOT EXISTS imagen (
+       id_imagen INT AUTO_INCREMENT PRIMARY KEY,
+       nombre VARCHAR(100) NOT NULL,
+       ruta_archivo VARCHAR(255) NOT NULL,
+       producto_id INT,
+      FOREIGN KEY (producto_id) REFERENCES hilado(id)
     )
   `;
 
@@ -117,7 +130,15 @@ BEGIN
     END IF;
 END;
 `;
-
+const tr_insertar_imagen = `
+  CREATE OR REPLACE TRIGGER tr_insertar_imagen
+  AFTER INSERT ON hilado
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO imagen(nombre, ruta_archivo, producto_id)
+  VALUES(NEW.nombre, NEW.ruta_archivo, NEW.id);
+  END;
+`;
 createTablesAndTriggers();
 existsRoleInDataBase();
 
@@ -130,10 +151,12 @@ function createTablesAndTriggers() {
   load(compra, "COMPRA");
   load(hilado, "HILADO");
   load(venta, "VENTA");
+  load(imagen, "IMAGEN");
 
   //CREACION DE TRIGGERS
   load(tr_compra_actualizarMateriaPrima, "TR_ACTUALIZAR_MATERIA_PRIMA");
   load(tr_descontar_stock_hilado, "TR_DESCONTAR_STOCK_HILADO");
+  load(tr_insertar_imagen, "TR_INSERTAR_IMAGEN");
 }
 
 function load(tabla, nombre) {

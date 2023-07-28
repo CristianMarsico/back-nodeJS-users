@@ -1,24 +1,21 @@
 "use strict";
 
-const { response } = require('express');
-const jwt = require('jsonwebtoken')
+// const { response } = require('express');
+const jwt = require('jsonwebtoken');
 
 exports.requireRefreshToken = (req, res, next) => {
 
 
     try {
         const refreshTokenCookie = req.cookies.refreshToken;
-
-        console.log(refreshTokenCookie)
-        if (!refreshTokenCookie) {
+        if (!refreshTokenCookie)
             throw new Error("No existe el token");
-        }
 
         let payload = jwt.verify(refreshTokenCookie, process.env.JWT_REFRESH);
 
         req.new_id = payload.id;
-        req.new_name = payload.name
-        req.new_user = payload.user
+        req.new_name = payload.name;
+        req.new_user = payload.user;
 
         next();
     } catch (error) {

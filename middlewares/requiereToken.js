@@ -1,29 +1,22 @@
 "use strict";
-
-const jwt = require('jsonwebtoken')
-
+const jwt = require('jsonwebtoken');
 
 exports.requiereToken = (req, res, next) => {
     try {
-
-
-
-        let token = req.headers?.authorization
+        let token = req.headers?.authorization;
         token = token.split(" ")[1];
-        if (!token) {
-            throw new Error("No Bearer")
-        }
-        let payload = jwt.verify(token, process.env.JWT_SECRET)
+        if (!token)
+            throw new Error("No Bearer");
 
+        let payload = jwt.verify(token, process.env.JWT_SECRET);
 
         //CREO PROPIEDADES NUEVAS AL REQ
         req.new_id = payload.id;
-        req.new_name = payload.name
-        req.new_user = payload.user
+        req.new_name = payload.name;
+        req.new_user = payload.user;
 
         next();
     } catch (e) {
-
         const errorsToken = {
             "invalid signature": "La firma J.W.T no es valida",
             "jwt expired": "J.W.T expirado",

@@ -71,7 +71,7 @@ exports.login = (async (req, res) => {
         conexion.query('SELECT * FROM usuario WHERE usuario = ?', [user], async (error, results) => {
             if (results.length == 0 || ! await bcrypt.compare(pass, results[0].pass)) {
                 if (error == null)
-                    return res.status(403).json({ error: "usuario o password incorrecto" })
+                    return res.status(404).json({ error: "usuario o password incorrecto" })
             }
 
             let { id, usuario, nombre, email } = results[0]

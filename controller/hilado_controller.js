@@ -21,7 +21,7 @@ exports.add = ((req, res) => {
         console.log(HILADO)
         addHilado(HILADO, conexion, res)
     } catch (error) {
-        return res.status(500).json("Error de servidor");
+        return res.status(500).json({ error: "Error de servidor" });
     }
 });
 
@@ -42,7 +42,7 @@ exports.getAll = (async (req, res) => {
         }
         return res.status(404).json({ error: "No hay productos en la base de datos" });
     } catch (error) {
-        return res.status(500).json("Error de servidor");
+        return res.status(500).json({ error: "Error de servidor" });
     }
 });
 

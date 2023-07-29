@@ -6,7 +6,7 @@ exports.updatePrecio = ((precio, id, res, conexion) => {
             return res.status(200).json('Precio actualizado correctamente.');
         });
     } catch (error) {
-        return res.status(500).json("Error de conexion");
+        return res.status(500).json({ error: "Error de conexion" });
     }
 });
 
@@ -29,13 +29,28 @@ exports.updateStock = ((id, stock, res, conexion) => {
                         return res.status(200).json('Stock actualizado correctamente.');
                     });
                 } else {
-                    return res.status(200).json(`No hay suficiente stock para realizar el retiro. Ud dispone de ${stockActual}`);
+                    return res.status(200).json({ error: `No hay suficiente stock para realizar el retiro. Ud dispone de ${stockActual}` });
                 }
             } else {
-                return res.status(404).json('No se encuentra en la base de datos.');
+                return res.status(404).json({ error: 'No se encuentra en la base de datos.' });
             }
         } catch (error) {
-            return res.status(500).json("Error de conexion");
+            return res.status(500).json({ error: "Error de conexion" });
         }
     });
 });
+
+exports.getAll = (conexion, res) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT nombre FROM materia_prima';
+        conexion.query(sql, (err, resultados) => {
+            if (err) {
+                return res.status(404).json({ error: 'Error al obtener las materias primas' });
+            }
+            if (resultados.length > 0) {
+                return resolve(resultados);
+            }
+            resolve(null);
+        });
+    });
+};

@@ -16,7 +16,7 @@ exports.reporte = (async (req, res) => {
         }
         return res.status(404).json({ error: 'No hay compras en esa fecha' });
     } catch (error) {
-        return res.status(500).json("Error de servidor")
+        return res.status(500).json({ error: "Error de servidor" })
     }
 });
 

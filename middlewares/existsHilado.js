@@ -11,7 +11,7 @@ exports.existsHilado = (async (req, res, next) => {
         let productoExistente = await existsHilado(producto_id, conexion, res);
         let existe = productoExistente[0].count > 0;
         if (!existe)
-            return res.status(200).json({ message: 'El hilado no existe en la base de datos' });
+            return res.status(200).json({ error: 'El hilado no existe en la base de datos' });
         return next();
 
     } catch (e) {

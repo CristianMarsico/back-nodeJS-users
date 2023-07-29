@@ -20,10 +20,10 @@ exports.venta = (async (req, res) => {
         const stockDisponible = cantidad[0].stock >= VENTA.cantidad_vendida;
 
         if (!stockDisponible)
-            return res.status(404).json(`No hay suficiente stock disponible. Dispone de: ${cantidad[0].stock}`);
+            return res.status(404).json({ error: `No hay suficiente stock disponible. Dispone de: ${cantidad[0].stock}` });
         else {
             if (VENTA.cantidad_vendida <= 0)
-                return res.status(404).json(`Revise el valor ingresado`);
+                return res.status(404).json({ error: `Revise el valor ingresado` });
 
             // Verificar eñ precio dependiendo si es MAYORISTA O MINORISTA
             let precio = await getPrecioComercial(VENTA.producto_id, VENTA.tipo_venta, conexion, res);
@@ -33,9 +33,9 @@ exports.venta = (async (req, res) => {
                 addVenta(VENTA, conexion, res);
                 return;
             }
-            return res.status(404).json(`Ocurrió un error al intetar agregar`);
+            return res.status(404).json({ error: `Ocurrió un error al intetar agregar` });
         }
     } catch (error) {
-        return res.status(500).json("Error de servidor");
+        return res.status(500).json({ error: "Error de servidor" });
     }
 });

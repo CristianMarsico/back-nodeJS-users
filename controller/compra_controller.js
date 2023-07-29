@@ -13,6 +13,6 @@ exports.compra = ((req, res) => {
         };
         addCompra(COMPRA, conexion, res);
     } catch (error) {
-        return res.status(500).json("Error de servidor");
+        return res.status(500).json({ error: "Error de servidor" });
     }
 });

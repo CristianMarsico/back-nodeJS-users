@@ -16,7 +16,7 @@ exports.existsMateriaPrima = (req, res, next) => {
                 return res.status(500).json({ error: 'Server error' });
 
             if (results.length == 0) // Si el usuario no existe
-                return res.status(200).json({ message: 'La Materia Prima NO existe en la base de datos' });
+                return res.status(404).json({ error: 'La Materia Prima NO existe en la base de datos' });
             else
                 //next
                 return next();

@@ -5,10 +5,10 @@ exports.addCompra = ((COMPRA, conexion, res) => {
     conexion.query('INSERT INTO compra SET ?', COMPRA, (err, result) => {
         try {
             if (err)
-                return res.status(404).json('Error al agregar la compra:');
+                return res.status(404).json({ error: 'Error al agregar la compra:' });
             return res.status(201).json(`Compra agregada exitosamente! - id: ${result.insertId}`);
         } catch (error) {
-            return res.status(500).json("Error de conexion");
+            return res.status(500).json({ error: "Error de conexion" });
         }
     });
 });
@@ -23,12 +23,12 @@ exports.getCompraFecha = ((fecha, conexion, res) => {
         conexion.query(sql, [fecha], (err, resultados) => {
             try {
                 if (err)
-                    return res.status(404).json('Error al obtener las compras');
+                    return res.status(404).json({ error: 'Error al obtener las compras' });
                 if (resultados.length > 0)
                     return resolve(resultados);
                 resolve(null);
             } catch (error) {
-                res.status(500).json("Error de conexion");
+                res.status(500).json({ error: "Error de conexion" });
             }
         });
     });

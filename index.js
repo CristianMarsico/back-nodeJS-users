@@ -1,8 +1,8 @@
 "use strict";
 
-const express = require('express')
-const cookie = require('cookie-parser')
-const dontev = require('dotenv')
+const express = require('express');
+const cookie = require('cookie-parser');
+const dontev = require('dotenv');
 const cors = require('cors');
 // const fs = require('fs');
 const path = require('path');
@@ -11,9 +11,9 @@ dontev.config({
     path: './env/.env'
 })
 
-require('./scripts/tables.js')
-require('./reporte/reporte.js')
-const app = express()
+require('./scripts/tables.js');
+require('./reporte/reporte.js');
+const app = express();
 
 //HACEMOS USO DE LAS COOKIES
 app.use(cookie())

@@ -27,7 +27,7 @@ exports.updatePrecio = ((req, res) => {
         else
             return res.status(404).json('Revise el valor del precio.');
     } catch (e) {
-        return res.status(500).json("Error de servidor")
+        return res.status(500).json("Error de servidor");
     }
 });
 

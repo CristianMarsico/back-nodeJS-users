@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS usuario_role (
   usuario_id INT,
   rol_id INT,
   PRIMARY KEY (usuario_id, rol_id),
-  FOREIGN KEY (usuario_id) REFERENCES usuario(id),
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE,
   FOREIGN KEY (rol_id) REFERENCES role(id)
 )
 `;

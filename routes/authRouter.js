@@ -49,7 +49,7 @@ router.post('/login',
 
 
 
-router.delete('/deleteUser/:id', requiereToken, existsUserInBD, authController.deleteUser)
+router.delete('/deleteUser/:id', existsUserInBD, authController.deleteUser)
 
 
 router.get('/info', requiereToken, authController.info)

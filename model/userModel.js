@@ -48,3 +48,22 @@ exports.addUser = (USUARIO, conexion, res) => {
         }
     });
 };
+
+exports.deleteUser = ((id, conexion, res) => {
+    return new Promise((resolve, reject) => {
+        let sql = 'DELETE FROM usuario WHERE id = ?';
+        conexion.query(sql, [id], (err, resultados) => {
+            try {
+                if (err)
+                    return res.status(404).json({ error: 'Error al eliminar el usuario' });
+                if (resultados.affectedRows > 0) {
+                    console.log("entro")
+                    return resolve(resultados);
+                }
+                return resolve(null);
+            } catch (error) {
+                return res.status(500).json({ error: "Error de conexion" });
+            }
+        });
+    });
+});

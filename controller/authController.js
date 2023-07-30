@@ -3,7 +3,7 @@
 const bcrypt = require('bcryptjs');
 const conexion = require('../database/bd.js');
 const { addRol, verificarExistenciaRol } = require('../model/rol_model.js');
-const { getUserByNameAndUserName, addUser } = require('../model/userModel.js');
+const { getUserByNameAndUserName, addUser, deleteUser } = require('../model/userModel.js');
 const { generateToken, generateRefreshToken } = require('../utils/tokenManager.js');
 
 exports.register = (async (req, res) => {
@@ -156,18 +156,15 @@ exports.logout = (req, res) => {
 exports.deleteUser = (async (req, res) => {
 
     const { id } = req.params;
-    let sql = 'DELETE FROM usuario WHERE id = ?'
-    conexion.query(sql, [id], (err, result) => {
 
-        try {
-
-            if (err)  // un error indica que hubo problemas con la consulta
-                return res.status(500).json({ error: 'Server error' });
-            else
-                res.status(200).json({ affectedRows: result.affectedRows })
-
-        } catch (error) {
-            return res.status(500).json({ error: "error de server" });
-        }
-    })
+    try {
+        let response = await deleteUser(id, conexion, res)
+        console.log(response)
+        if (response != null)  // un error indica que hubo problemas con la consulta
+            return res.status(200).json(`Usuario borrado con éxito`);
+        else
+            res.status(404).json({ error: "no se ha podido eliminar el usuario" })
+    } catch (error) {
+        return res.status(500).json({ error: "error de server" });
+    }
 })

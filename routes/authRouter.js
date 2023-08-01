@@ -50,11 +50,12 @@ router.post('/login',
 
 
 router.delete('/deleteUser/:id', existsUserInBD, authController.deleteUser)
+router.put('/updateUser/:id', authController.updateUser)
+router.get('/getAll', authController.getAllUser)
+
 
 
 router.get('/info', requiereToken, authController.info)
-
-router.get('/getAll', authController.getAllUser)
 
 router.get('/refreshToken', requireRefreshToken, authController.refreshToken)
 

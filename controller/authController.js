@@ -3,7 +3,7 @@
 const bcrypt = require('bcryptjs');
 const conexion = require('../database/bd.js');
 const { addRol, verificarExistenciaRol } = require('../model/rol_model.js');
-const { getUserByNameAndUserName, addUser, deleteUser } = require('../model/userModel.js');
+const { getUserByNameAndUserName, addUser, deleteUser, updateUser } = require('../model/userModel.js');
 const { generateToken, generateRefreshToken } = require('../utils/tokenManager.js');
 
 exports.register = (async (req, res) => {
@@ -71,7 +71,7 @@ exports.login = (async (req, res) => {
         conexion.query('SELECT * FROM usuario WHERE usuario = ?', [user], async (error, results) => {
             if (results.length == 0 || ! await bcrypt.compare(pass, results[0].pass)) {
                 if (error == null)
-                    return res.status(404).json({ error: "usuario o password incorrecto" })
+                    return res.status(404).json({ error: "Usuario o password incorrecto" })
             }
 
             let { id, usuario, nombre, email } = results[0]
@@ -104,7 +104,7 @@ exports.info = ((req, res) => {
 
         try {
             if (err)  // un error indica que hubo problemas con la consulta
-                return res.status(500).json({ error: 'Server error' });
+                return res.status(500).json({ error: 'Error de servidor' });
             if (results.length === 0)  // Si el usuario no existe
                 throw new Error("No existe usuario con ese id ")
             else {
@@ -125,7 +125,7 @@ exports.getAllUser = ((req, res) => {
 
         try {
             if (err)  // un error indica que hubo problemas con la consulta
-                return res.status(500).json({ error: 'Server error' });
+                return res.status(500).json({ error: 'Error de servidor' });
             if (results.length === 0)  // Si el usuario no existe
                 throw new Error("No existen usuarios en la BD ")
             else
@@ -143,7 +143,7 @@ exports.refreshToken = (req, res) => {
         return res.status(200).json({ token, expiresIn: tiempoVidaToken });
     } catch (error) {
         console.log(error);
-        return res.status(500).json({ error: "error de server" });
+        return res.status(500).json({ error: "Error de server" });
     }
 }
 
@@ -163,8 +163,24 @@ exports.deleteUser = (async (req, res) => {
         if (response != null)  // un error indica que hubo problemas con la consulta
             return res.status(200).json(`Usuario borrado con éxito`);
         else
-            res.status(404).json({ error: "no se ha podido eliminar el usuario" })
+            res.status(404).json({ error: "No se ha podido eliminar el usuario" })
     } catch (error) {
-        return res.status(500).json({ error: "error de server" });
+        return res.status(500).json({ error: "Error de server" });
     }
 })
+
+exports.updateUser = (async (req, res) => {
+
+    const { id, } = req.params;
+    const nombre = req.body.nombre;
+    try {
+        let response = await updateUser(id, nombre, conexion, res);
+        if (response != null)  // un error indica que hubo problemas con la consulta
+            return res.status(200).json(`Usuario actualizado con éxito`);
+        else
+            res.status(404).json({ error: "No se ha podido actualizar el usuario" })
+    } catch (error) {
+        return res.status(500).json({ error: "Error de server" });
+    }
+})
+

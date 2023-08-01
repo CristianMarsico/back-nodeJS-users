@@ -41,7 +41,6 @@ exports.addUser = (USUARIO, conexion, res) => {
         try {
             if (err)
                 return res.status(404).json('Error al agregar la usuario');
-            // res.status(201).json(`Usuario agregado exitosamente! - id: ${resultados.insertId}`);
             return;
         } catch (error) {
             return res.status(500).json("Error de conexion");
@@ -56,10 +55,8 @@ exports.deleteUser = ((id, conexion, res) => {
             try {
                 if (err)
                     return res.status(404).json({ error: 'Error al eliminar el usuario' });
-                if (resultados.affectedRows > 0) {
-                    console.log("entro")
+                if (resultados.affectedRows > 0)
                     return resolve(resultados);
-                }
                 return resolve(null);
             } catch (error) {
                 return res.status(500).json({ error: "Error de conexion" });
@@ -67,3 +64,21 @@ exports.deleteUser = ((id, conexion, res) => {
         });
     });
 });
+
+exports.updateUser = ((id, nombre, conexion, res) => {
+    return new Promise((resolve, reject) => {
+        let sql = 'UPDATE usuario SET nombre= ? WHERE id = ?';
+        conexion.query(sql, [nombre, id], (err, resultados) => {
+            try {
+                if (err)
+                    return res.status(404).json({ error: 'Error al editar usuario' });
+                if (resultados.affectedRows > 0)
+                    return resolve(resultados);
+                return resolve(null);
+            } catch (error) {
+                return res.status(500).json({ error: "Error de conexion" });
+            }
+        });
+    });
+});
+

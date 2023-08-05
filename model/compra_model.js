@@ -17,8 +17,6 @@ exports.addCompra = ((COMPRA, conexion, res) => {
 //Retorna el resultados con las compras realizadas en una fecha dada.
 exports.getCompraFecha = ((fecha, conexion, res) => {
     return new Promise((resolve, reject) => {
-        //CURDATE() -> DIA ACTUAL
-        // const consulta = 'SELECT * FROM compra WHERE DAY(CURDATE()) = 17 and MONTH(fecha)= MONTH(CURDATE()) -1';
         const sql = 'SELECT * FROM compra WHERE MONTH(fecha) = ?';
         conexion.query(sql, [fecha], (err, resultados) => {
             try {

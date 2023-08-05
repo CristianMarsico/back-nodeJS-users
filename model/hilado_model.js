@@ -54,10 +54,6 @@ exports.getPrecioComercial = (producto_id, tipo_venta, conexion, res) => {
     });
 };
 exports.addHilado = (HILADO, conexion, res) => {
-
-    // exports.addHilado = (producto_terminado, stock_loberia, stock_buenosAires, precio_venta_mayorista,
-    //     precio_venta_minorista, descripcion, tipo, nombre, imagen, conexion, res) => {
-
     conexion.query('INSERT INTO hilado SET ?', HILADO, (err, result) => {
         try {
             if (err)
@@ -72,6 +68,21 @@ exports.addHilado = (HILADO, conexion, res) => {
 exports.getAllHilado = (conexion, res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM hilado';
+        conexion.query(sql, (err, resultados) => {
+            if (err) {
+                return res.status(404).json({ error: 'Error al obtener hilado' });
+            }
+            if (resultados.length > 0) {
+                return resolve(resultados);
+            }
+            resolve(null);
+        });
+    });
+};
+
+exports.getHiladoByName = (conexion, res) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT id, producto_terminado FROM hilado';
         conexion.query(sql, (err, resultados) => {
             if (err) {
                 return res.status(404).json({ error: 'Error al obtener hilado' });

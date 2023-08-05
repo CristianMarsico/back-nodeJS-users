@@ -34,7 +34,6 @@ exports.updatePrecio = ((req, res) => {
 exports.getAll = (async (req, res) => {
     try {
         let response = await getAll(conexion, res);
-        console.log(response)
         if (response != null)
             return res.status(200).json({ response });
         return res.status(404).json({ error: "No hay Materia Prima en la base de datos" });

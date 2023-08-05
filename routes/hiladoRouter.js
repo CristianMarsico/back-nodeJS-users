@@ -34,5 +34,6 @@ const upload = multer({ storage });
 //ENDPOINTS
 router.post('/hilado', upload.single('imagen'), hilado.add);
 router.get('/hilado', hilado.getAll);
+router.get('/hiladoNombre', hilado.getHiladoByName);
 
 module.exports = router;

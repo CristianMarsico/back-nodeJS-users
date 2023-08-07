@@ -40,9 +40,24 @@ exports.updateStock = ((id, stock, res, conexion) => {
     });
 });
 
-exports.getAll = (conexion, res) => {
+exports.getMPByName = (conexion, res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT nombre FROM materia_prima';
+        conexion.query(sql, (err, resultados) => {
+            if (err) {
+                return res.status(404).json({ error: 'Error al obtener las materias primas' });
+            }
+            if (resultados.length > 0) {
+                return resolve(resultados);
+            }
+            resolve(null);
+        });
+    });
+};
+
+exports.getAllMP = (conexion, res) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT * FROM materia_prima';
         conexion.query(sql, (err, resultados) => {
             if (err) {
                 return res.status(404).json({ error: 'Error al obtener las materias primas' });

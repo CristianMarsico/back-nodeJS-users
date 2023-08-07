@@ -12,6 +12,7 @@ const { existsMateriaPrima } = require('../middlewares/existsMateriaPrima');
 //ENDPOINTS
 router.put('/actualizarStock_MP/:id/:stock', existsMateriaPrima, mp.updateStock);
 router.put('/actualizarPrecio_MP/:id/:precio', existsMateriaPrima, mp.updatePrecio);
-router.get('/getAllMP', mp.getAll);
+router.get('/getMPByName', mp.getMPByName);
+router.get('/getAllMP', mp.getAllMP);
 
 module.exports = router;

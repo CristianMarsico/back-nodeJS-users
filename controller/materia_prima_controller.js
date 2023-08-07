@@ -1,6 +1,6 @@
 "use strict";
 const conexion = require('../database/bd.js');
-const { updatePrecio, updateStock, getAll } = require('../model/materiaPrima_model.js');
+const { updatePrecio, updateStock, getMPByName, getAllMP } = require('../model/materiaPrima_model.js');
 
 exports.updateStock = ((req, res) => {
     try {
@@ -31,9 +31,21 @@ exports.updatePrecio = ((req, res) => {
     }
 });
 
-exports.getAll = (async (req, res) => {
+exports.getMPByName = (async (req, res) => {
     try {
-        let response = await getAll(conexion, res);
+        let response = await getMPByName(conexion, res);
+        if (response != null)
+            return res.status(200).json({ response });
+        return res.status(404).json({ error: "No hay Materia Prima en la base de datos" });
+
+    } catch (error) {
+        return res.status(500).json("Error de servidor");
+    }
+});
+
+exports.getAllMP = (async (req, res) => {
+    try {
+        let response = await getAllMP(conexion, res);
         if (response != null)
             return res.status(200).json({ response });
         return res.status(404).json({ error: "No hay Materia Prima en la base de datos" });

@@ -6,7 +6,7 @@ exports.requiereToken = (req, res, next) => {
         let token = req.headers?.authorization;
         token = token.split(" ")[1];
         if (!token)
-            throw new Error("No Bearer");
+            return res.status(401).json({ error: "No" });
 
         let payload = jwt.verify(token, process.env.JWT_SECRET);
 

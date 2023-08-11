@@ -1,8 +1,6 @@
 "use strict";
 exports.existsHilado = (id, conexion, res) => {
     return new Promise((resolve, reject) => {
-        //CURDATE() -> DIA ACTUAL
-        // const consulta = 'SELECT * FROM compra WHERE DAY(CURDATE()) = 17 and MONTH(fecha)= MONTH(CURDATE()) -1';
         const sql = 'SELECT COUNT(*) AS count FROM hilado WHERE id = ?';
         conexion.query(sql, [id], (err, resultados) => {
             if (err) {
@@ -18,8 +16,6 @@ exports.existsHilado = (id, conexion, res) => {
 
 exports.getCantidadStockCiudad = (producto_id, stock_origen, conexion, res) => {
     return new Promise((resolve, reject) => {
-        //CURDATE() -> DIA ACTUAL
-        // const consulta = 'SELECT * FROM compra WHERE DAY(CURDATE()) = 17 and MONTH(fecha)= MONTH(CURDATE()) -1';
         const totaStock = stock_origen === 'stock_loberia' ? 'stock_loberia' : 'stock_buenosAires';
         const sql = `SELECT ${totaStock} AS stock FROM hilado WHERE id = ?`;
         conexion.query(sql, [producto_id], (err, resultados) => {
@@ -93,4 +89,22 @@ exports.getHiladoByName = (conexion, res) => {
             resolve(null);
         });
     });
+};
+
+exports.transferStockBetweenLocations = (id, cantidad_tranferida, origen, destino, conexion, res) => {
+
+    try {
+        const updateOrigenQuery = `UPDATE hilado SET ${origen} = ${origen} - ? WHERE id = ?`;
+        conexion.query(updateOrigenQuery, [cantidad_tranferida, id]);
+
+        // Sumar la cantidad al destino
+        const updateDestinoQuery = `UPDATE hilado SET ${destino} = ${destino} + ? WHERE id = ?`;
+        conexion.query(updateDestinoQuery, [cantidad_tranferida, id]);
+        conexion.commit();
+
+        return res.status(201).json('Stock actualizado correctamente.');
+    } catch (error) {
+        conexion.rollback();
+        return res.status(404).json({ error: 'Error al actulizar el Stock.' });
+    }
 };

@@ -35,5 +35,6 @@ const upload = multer({ storage });
 router.post('/hilado', upload.single('imagen'), hilado.add);
 router.get('/hilado', hilado.getAll);
 router.get('/hiladoNombre', hilado.getHiladoByName);
+router.put('/trasferirStock/:id', hilado.transferStockBetweenLocations);
 
 module.exports = router;

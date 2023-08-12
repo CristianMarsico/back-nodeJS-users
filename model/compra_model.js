@@ -15,10 +15,10 @@ exports.addCompra = ((COMPRA, conexion, res) => {
 
 
 //Retorna el resultados con las compras realizadas en una fecha dada.
-exports.getCompraFecha = ((fecha, conexion, res) => {
+exports.getCompraFecha = ((min, max, conexion, res) => {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT * FROM compra WHERE MONTH(fecha) = ?';
-        conexion.query(sql, [fecha], (err, resultados) => {
+        const sql = 'SELECT COUNT(producto) as total, producto, fecha, SUM(cantidad) as total_cantidad, SUM(total) as total_compra FROM compra WHERE fecha BETWEEN ? AND ? GROUP BY producto, fecha ORDER BY producto, fecha';
+        conexion.query(sql, [min, max], (err, resultados) => {
             try {
                 if (err)
                     return res.status(404).json({ error: 'Error al obtener las compras' });

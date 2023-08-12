@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS materia_prima(
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL,
   stock INT NOT NULL,
-  precio DECIMAL(10, 2) NOT NULL
+  precio DECIMAL(10, 2)
 )
 `;
 
@@ -139,6 +139,18 @@ const tr_insertar_imagen = `
   VALUES(NEW.nombre, NEW.ruta_archivo, NEW.id);
   END;
 `;
+
+
+// const tr_mp_cambiarNombreCompra = `
+//   CREATE OR REPLACE TRIGGER tr_mp_cambiarNombreCompra
+//  AFTER UPDATE ON materia_prima
+// FOR EACH ROW
+// BEGIN
+//   UPDATE compra
+//   SET producto = NEW.nombre
+//   WHERE materia_prima_id = NEW.id;
+// END;
+// `;
 createTablesAndTriggers();
 existsRoleInDataBase();
 
@@ -157,6 +169,8 @@ function createTablesAndTriggers() {
   load(tr_compra_actualizarMateriaPrima, "TR_ACTUALIZAR_MATERIA_PRIMA");
   load(tr_descontar_stock_hilado, "TR_DESCONTAR_STOCK_HILADO");
   load(tr_insertar_imagen, "TR_INSERTAR_IMAGEN");
+  // load(tr_mp_cambiarNombreCompra, "TR_CAMBIAR_NOMBRE_COMPRA");
+
 }
 
 function load(tabla, nombre) {

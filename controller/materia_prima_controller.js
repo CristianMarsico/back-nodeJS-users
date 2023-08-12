@@ -1,6 +1,12 @@
 "use strict";
 const conexion = require('../database/bd.js');
-const { updatePrecio, updateStock, getMPByName, getAllMP, getStockMP, deleteMP } = require('../model/materiaPrima_model.js');
+const { updatePrecio,
+    updateStock,
+    getMPByName,
+    getAllMP,
+    getStockMP,
+    deleteMP,
+    updateMP } = require('../model/materiaPrima_model.js');
 
 // exports.updateStock = ((req, res) => {
 //     try {
@@ -89,6 +95,28 @@ exports.deleteMP = (async (req, res) => {
             return res.status(200).json(`Materia prima borrada con éxito`);
         else
             res.status(404).json({ error: "No se ha podido eliminar la materia prima" })
+    } catch (error) {
+        return res.status(500).json({ error: "Error de servidor" });
+    }
+})
+
+exports.updateMP = (async (req, res) => {
+
+    const { id } = req.params;
+    const nombre = req.body.nombre;
+    const stock = req.body.stock;
+    const precio = req.body.precio;
+
+    console.log(id)
+    console.log(nombre)
+    console.log(stock)
+    console.log(precio)
+    try {
+        let response = await updateMP(nombre, stock, precio, id, conexion, res)
+        if (response != null)
+            return res.status(200).json(`Materia prima actualizada con éxito`);
+        else
+            res.status(404).json({ error: "No se ha podido actualizar la materia prima" })
     } catch (error) {
         return res.status(500).json({ error: "Error de servidor" });
     }

@@ -11,12 +11,6 @@ exports.reporte = (async (req, res) => {
     const { fechaMin } = req.params;
     const { fechaMax } = req.params;
     try {
-        // const fechaMin = req.body.fechaMin;
-        // const fechaMax = req.body.fechaMax;
-
-        console.log(fechaMin)
-        console.log(fechaMax)
-
         let respuesta = await getCompraFecha(fechaMin, fechaMax, conexion, res);
         if (respuesta != null) {
             generarInforme(respuesta, fechaMin, fechaMax);
@@ -31,7 +25,6 @@ exports.reporte = (async (req, res) => {
 });
 
 function generarInforme(compras, fechaMin, fechaMax) {
-
     const doc = new PDFDocument();
     const desktopPath = path.join(os.homedir(), 'Desktop');
 
@@ -43,11 +36,13 @@ function generarInforme(compras, fechaMin, fechaMax) {
     let total = 0;
     compras.forEach((compra) => {
 
-        doc.text(`CANTIDAD: ${compra.total} - MATERIA PRIMA: ${compra.producto} - FECHA: ${compra.fecha} - CANTIDAD: ${compra.total_cantidad} - TOTAL: ${compra.total_compra}`);
+        doc.text(`FECHA: ${compra.fecha}`);
+        doc.text(`CANTIDAD: ${compra.total} - MATERIA PRIMA: ${compra.producto}`);
+        doc.text(`COSTO UNITARIO: $${compra.precio_unitario} - TOTAL: $${compra.total_compra}`);
         total += compra.total_compra;
         doc.moveDown();
     });
-    doc.fontSize(14).text(`El total en compras fue de: $ ${total}`);
+    doc.fontSize(14).text(`TOTAL:  en compras entra las fechas ${fechaMin} y ${fechaMax} es de: $${total}`);
     doc.moveDown();
     doc.end();
 }

@@ -12,7 +12,7 @@ dontev.config({
 })
 
 require('./scripts/tables.js');
-require('./reporte/reporte.js');
+// require('./reporte/reporte.js');
 const app = express();
 
 //HACEMOS USO DE LAS COOKIES

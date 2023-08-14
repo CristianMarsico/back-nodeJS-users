@@ -8,21 +8,6 @@ const { updatePrecio,
     deleteMP,
     updateMP } = require('../model/materiaPrima_model.js');
 
-// exports.updateStock = ((req, res) => {
-//     try {
-//         const { id, stock } = req.params;
-//         if (stock > 0) {
-//             updateStock(id, stock, res, conexion);
-//             return;
-//         }
-//         else
-//             return res.status(404).json('Revise la cantidad del stock.');
-//     } catch (e) {
-//         return res.status(500).json("Error de servidor")
-//     }
-// });
-
-
 exports.updatePrecio = ((req, res) => {
     try {
         const { id, precio } = req.params;
@@ -66,6 +51,7 @@ exports.updateStock = (async (req, res) => {
     try {
         const { id } = req.params;
         const cantidad = req.body.cantidad;
+        const nombre = req.body.nombre;
 
         if (cantidad <= 0)
             return res.status(404).json({ error: "Verifique el valor ingresado" });
@@ -76,7 +62,7 @@ exports.updateStock = (async (req, res) => {
             return res.status(404).json({ error: "No dispone de stock" });
 
         if (stockDisponible >= cantidad)
-            updateStock(id, cantidad, conexion, res);
+            updateStock(id, cantidad, nombre, conexion, res);
         else
             return res.status(404).json({ error: "No dispone esa cantidad" });
 

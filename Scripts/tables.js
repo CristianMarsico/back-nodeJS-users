@@ -37,6 +37,14 @@ CREATE TABLE IF NOT EXISTS materia_prima(
 )
 `;
 
+const tablita = `
+CREATE TABLE IF NOT EXISTS tablita(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL,
+  stock INT NOT NULL
+)
+`;
+
 const compra = `
 CREATE TABLE IF NOT EXISTS compra(
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -84,35 +92,35 @@ const venta = `
   )
 `;
 
-const tr_compra_actualizarMateriaPrima = `
-CREATE OR REPLACE TRIGGER tr_compra_actualizarMateriaPrima 
-AFTER INSERT ON compra
-FOR EACH ROW
-BEGIN
-  DECLARE cantidad INT;
-  DECLARE stock_actual INT;
-  
-  SELECT NEW.cantidad INTO cantidad;
-  
-  SELECT stock INTO stock_actual
-  FROM materia_prima
-  WHERE nombre = LOWER(NEW.producto);
-  
-  IF stock_actual IS NULL THEN
-    -- La materia prima no existe, se debe agregar
-    INSERT INTO materia_prima (nombre, stock, precio)
-    VALUES (LOWER(NEW.producto), cantidad, NEW.precio_unitario);
-    
-  ELSE
-    -- La materia prima existe, se debe actualizar el stock
-    UPDATE materia_prima
-    SET stock = stock + cantidad
-    WHERE nombre = LOWER(NEW.producto);
-    
-  END IF;
-END;
-;
-`;
+// const tr_compra_actualizarMateriaPrima = `
+// CREATE OR REPLACE TRIGGER tr_compra_actualizarMateriaPrima 
+// AFTER INSERT ON compra
+// FOR EACH ROW
+// BEGIN
+//   DECLARE cantidad INT;
+//   DECLARE stock_actual INT;
+
+//   SELECT NEW.cantidad INTO cantidad;
+
+//   SELECT stock INTO stock_actual
+//   FROM materia_prima
+//   WHERE nombre = LOWER(NEW.producto);
+
+//   IF stock_actual IS NULL THEN
+//     -- La materia prima no existe, se debe agregar
+//     INSERT INTO materia_prima (nombre, stock, precio)
+//     VALUES (LOWER(NEW.producto), cantidad, NEW.precio_unitario);
+
+//   ELSE
+//     -- La materia prima existe, se debe actualizar el stock
+//     UPDATE materia_prima
+//     SET stock = stock + cantidad
+//     WHERE nombre = LOWER(NEW.producto);
+
+//   END IF;
+// END;
+// ;
+// `;
 
 const tr_descontar_stock_hilado = `
 CREATE OR REPLACE TRIGGER tr_descontar_stock_hilado 
@@ -140,6 +148,42 @@ const tr_insertar_imagen = `
   END;
 `;
 
+const tr_compra_actualizarMateriaPrima = `
+CREATE OR REPLACE TRIGGER tr_compra_actualizarMateriaPrima 
+AFTER INSERT ON compra FOR EACH ROW
+BEGIN
+  DECLARE stock_diff INT;
+  SET stock_diff = NEW.cantidad;
+  
+  IF EXISTS (SELECT 1 FROM materia_prima WHERE nombre = NEW.producto) THEN
+    UPDATE materia_prima SET stock = stock + stock_diff WHERE nombre = NEW.producto;
+  ELSE
+    INSERT INTO materia_prima (nombre, stock) VALUES (NEW.producto, stock_diff);
+  END IF;
+END;
+;
+`;
+
+const tr_mp_cambiarNombreCompra = `
+  CREATE OR REPLACE TRIGGER tr_mp_cambiarNombreCompra
+ AFTER UPDATE ON materia_prima FOR EACH ROW
+BEGIN
+  IF NEW.nombre != OLD.nombre THEN
+    UPDATE compra SET producto = NEW.nombre WHERE producto = OLD.nombre;
+  END IF;
+END;
+`;
+
+// const tr_tablita = `
+// CREATE OR REPLACE TRIGGER tr_tablita 
+// AFTER UPDATE ON materia_prima FOR EACH ROW
+// BEGIN
+//   DECLARE stock_diff INT;
+//   SET stock_diff = NEW.stock;
+//     INSERT INTO tablita (nombre, stock) VALUES (NEW.nombre, stock_diff);
+// END;
+// ;
+// `;
 
 // const tr_mp_cambiarNombreCompra = `
 //   CREATE OR REPLACE TRIGGER tr_mp_cambiarNombreCompra
@@ -164,12 +208,14 @@ function createTablesAndTriggers() {
   load(hilado, "HILADO");
   load(venta, "VENTA");
   load(imagen, "IMAGEN");
+  load(tablita, "TABLITA");
 
   //CREACION DE TRIGGERS
   load(tr_compra_actualizarMateriaPrima, "TR_ACTUALIZAR_MATERIA_PRIMA");
   load(tr_descontar_stock_hilado, "TR_DESCONTAR_STOCK_HILADO");
   load(tr_insertar_imagen, "TR_INSERTAR_IMAGEN");
-  // load(tr_mp_cambiarNombreCompra, "TR_CAMBIAR_NOMBRE_COMPRA");
+  load(tr_mp_cambiarNombreCompra, "TR_CAMBIAR_NOMBRE_COMPRA");
+  // load(tr_tablita, "TR_TABLITA");
 
 }
 

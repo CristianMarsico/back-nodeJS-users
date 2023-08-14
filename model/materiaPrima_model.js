@@ -43,19 +43,41 @@ exports.getAllMP = (conexion, res) => {
 };
 
 
-exports.updateStock = (id, cantidad, conexion, res) => {
+exports.updateStock = (id, cantidad, nombre, conexion, res) => {
 
     try {
         const updateOrigenQuery = `UPDATE materia_prima SET stock = stock - ? WHERE id = ?`;
         conexion.query(updateOrigenQuery, [cantidad, id]);
-        conexion.commit();
-        return res.status(201).json('Stock actualizado correctamente.');
+
+        let datos = insertTablita(cantidad, nombre, conexion);
+        if (datos != null) {
+            conexion.commit();
+            return res.status(201).json('Stock actualizado correctamente.');
+        }
     } catch (error) {
         conexion.rollback();
         return res.status(404).json({ error: 'Error al actulizar el Stock.' });
     }
 };
 
+function insertTablita(cantidad, nombre, conexion) {
+    return new Promise((resolve, reject) => {
+        let sql = 'INSERT INTO tablita (nombre, stock) VALUES (?, ?)';
+        conexion.query(sql, [nombre, cantidad], (err, resultados) => {
+            try {
+                if (err)
+                    return;
+                if (resultados.affectedRows > 0)
+                    return resolve(resultados);
+                return resolve(null);
+            } catch (error) {
+                return res.status(500).json({ error: "Error de conexion" });
+            }
+        });
+    });
+
+
+}
 
 exports.getStockMP = (id, conexion, res) => {
     return new Promise((resolve, reject) => {

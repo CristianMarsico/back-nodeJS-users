@@ -32,16 +32,16 @@ const materia_Prima = `
 CREATE TABLE IF NOT EXISTS materia_prima(
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL,
-  stock INT NOT NULL,
-  precio DECIMAL(10, 2)
+  stock INT NOT NULL
 )
 `;
 
-const tablita = `
-CREATE TABLE IF NOT EXISTS tablita(
+const enProduccion = `
+CREATE TABLE IF NOT EXISTS enProduccion(
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL,
-  stock INT NOT NULL
+  stock INT NOT NULL,
+  fecha DATE NOT NULL
 )
 `;
 
@@ -170,6 +170,7 @@ const tr_mp_cambiarNombreCompra = `
 BEGIN
   IF NEW.nombre != OLD.nombre THEN
     UPDATE compra SET producto = NEW.nombre WHERE producto = OLD.nombre;
+     UPDATE enproduccion SET nombre = NEW.nombre WHERE nombre = OLD.nombre;
   END IF;
 END;
 `;
@@ -208,15 +209,13 @@ function createTablesAndTriggers() {
   load(hilado, "HILADO");
   load(venta, "VENTA");
   load(imagen, "IMAGEN");
-  load(tablita, "TABLITA");
+  load(enProduccion, "EN_PRODUCCION");
 
   //CREACION DE TRIGGERS
   load(tr_compra_actualizarMateriaPrima, "TR_ACTUALIZAR_MATERIA_PRIMA");
   load(tr_descontar_stock_hilado, "TR_DESCONTAR_STOCK_HILADO");
   load(tr_insertar_imagen, "TR_INSERTAR_IMAGEN");
   load(tr_mp_cambiarNombreCompra, "TR_CAMBIAR_NOMBRE_COMPRA");
-  // load(tr_tablita, "TR_TABLITA");
-
 }
 
 function load(tabla, nombre) {

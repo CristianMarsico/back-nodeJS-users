@@ -1,6 +1,6 @@
 "use strict";
 const conexion = require('../database/bd.js');
-const { updatePrecio,
+const {
     updateStock,
     getMPByName,
     getAllMP,
@@ -8,19 +8,19 @@ const { updatePrecio,
     deleteMP,
     updateMP } = require('../model/materiaPrima_model.js');
 
-exports.updatePrecio = ((req, res) => {
-    try {
-        const { id, precio } = req.params;
-        if (precio > 0) {
-            updatePrecio(precio, id, res, conexion);
-            return;
-        }
-        else
-            return res.status(404).json('Revise el valor del precio.');
-    } catch (e) {
-        return res.status(500).json("Error de servidor");
-    }
-});
+// exports.updatePrecio = ((req, res) => {
+//     try {
+//         const { id, precio } = req.params;
+//         if (precio > 0) {
+//             updatePrecio(precio, id, res, conexion);
+//             return;
+//         }
+//         else
+//             return res.status(404).json('Revise el valor del precio.');
+//     } catch (e) {
+//         return res.status(500).json("Error de servidor");
+//     }
+// });
 
 exports.getMPByName = (async (req, res) => {
     try {
@@ -52,6 +52,7 @@ exports.updateStock = (async (req, res) => {
         const { id } = req.params;
         const cantidad = req.body.cantidad;
         const nombre = req.body.nombre;
+        const fecha = req.body.fecha;
 
         if (cantidad <= 0)
             return res.status(404).json({ error: "Verifique el valor ingresado" });
@@ -62,7 +63,7 @@ exports.updateStock = (async (req, res) => {
             return res.status(404).json({ error: "No dispone de stock" });
 
         if (stockDisponible >= cantidad)
-            updateStock(id, cantidad, nombre, conexion, res);
+            updateStock(id, cantidad, nombre, fecha, conexion, res);
         else
             return res.status(404).json({ error: "No dispone esa cantidad" });
 
@@ -91,14 +92,8 @@ exports.updateMP = (async (req, res) => {
     const { id } = req.params;
     const nombre = req.body.nombre;
     const stock = req.body.stock;
-    const precio = req.body.precio;
-
-    console.log(id)
-    console.log(nombre)
-    console.log(stock)
-    console.log(precio)
     try {
-        let response = await updateMP(nombre, stock, precio, id, conexion, res)
+        let response = await updateMP(nombre, stock, id, conexion, res)
         if (response != null)
             return res.status(200).json(`Materia prima actualizada con éxito`);
         else

@@ -6,7 +6,6 @@ const { body } = require('express-validator')
 
 //HACEMOS USO DEL CONTROLADOR
 const authController = require('../controller/authController.js')
-const reporte = require('../controller/reporteController.js')
 
 //HACEMOS USO DE LOS MIDDLEWARES
 const { validatorReqExpress } = require('../middlewares/validatorRequest.js')
@@ -61,7 +60,6 @@ router.get('/refreshToken', requireRefreshToken, authController.refreshToken)
 
 router.get('/logout', authController.logout)
 
-router.get('/reporteCompra/:fechaMin/:fechaMax', reporte.reporte)
 
 
 module.exports = router

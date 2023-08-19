@@ -54,6 +54,11 @@ exports.updateStock = (async (req, res) => {
         const nombre = req.body.nombre;
         const fecha = req.body.fecha;
 
+        const fechaActual = new Date();
+        const formattedFechaActual = fechaActual.toISOString().split('T')[0];
+        if (fecha > formattedFechaActual)
+            return res.status(404).json({ error: 'Revise la fecha. No puede registar retiros superiores a la fecha actual' });
+
         if (cantidad <= 0)
             return res.status(404).json({ error: "Verifique el valor ingresado" });
 

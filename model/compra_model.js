@@ -13,7 +13,6 @@ exports.addCompra = ((COMPRA, conexion, res) => {
     });
 });
 
-
 //Retorna el resultados con las compras realizadas en una fecha dada.
 exports.getCompraFecha = ((min, max, conexion, res) => {
     return new Promise((resolve, reject) => {

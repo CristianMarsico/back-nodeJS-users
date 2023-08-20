@@ -173,8 +173,11 @@ exports.updateUser = (async (req, res) => {
 
     const { id, } = req.params;
     const nombre = req.body.nombre;
+    const email = req.body.email;
+
+    console.log(id, nombre, email)
     try {
-        let response = await updateUser(id, nombre, conexion, res);
+        let response = await updateUser(id, nombre, email, conexion, res);
         if (response != null)  // un error indica que hubo problemas con la consulta
             return res.status(200).json(`Usuario actualizado con éxito`);
         else

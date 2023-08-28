@@ -1,8 +1,8 @@
 "use strict";
-exports.existsHilado = (id, conexion, res) => {
+exports.existsHilado = (producto_terminado, conexion, res) => {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT COUNT(*) AS count FROM hilado WHERE id = ?';
-        conexion.query(sql, [id], (err, resultados) => {
+        const sql = 'SELECT COUNT(*) AS count FROM hilado WHERE producto_terminado = ?';
+        conexion.query(sql, [producto_terminado], (err, resultados) => {
             if (err) {
                 return res.status(404).json({ error: 'Error al obtener hilado' });
             }

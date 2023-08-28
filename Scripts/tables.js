@@ -56,6 +56,19 @@ CREATE TABLE IF NOT EXISTS compra(
   )
 `;
 
+// const hilado = `
+//     CREATE TABLE IF NOT EXISTS hilado (
+//       id INT AUTO_INCREMENT PRIMARY KEY,
+//       producto_terminado VARCHAR(50) NOT NULL,
+//       stock_loberia INT NOT NULL,
+//       stock_buenosAires INT NOT NULL,
+//       precio_venta_mayorista DECIMAL(10, 2) NOT NULL,
+//       precio_venta_minorista DECIMAL(10, 2) NOT NULL,
+//       nombre VARCHAR(100) NOT NULL,
+//       ruta_archivo VARCHAR(255) NOT NULL,
+//       descripcion VARCHAR(200)
+//     )
+//   `;
 const hilado = `
     CREATE TABLE IF NOT EXISTS hilado (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -63,10 +76,7 @@ const hilado = `
       stock_loberia INT NOT NULL,
       stock_buenosAires INT NOT NULL,
       precio_venta_mayorista DECIMAL(10, 2) NOT NULL,
-      precio_venta_minorista DECIMAL(10, 2) NOT NULL,
-      nombre VARCHAR(100) NOT NULL,
-      ruta_archivo VARCHAR(255) NOT NULL,
-      descripcion VARCHAR(200)
+      precio_venta_minorista DECIMAL(10, 2) NOT NULL
     )
   `;
 
@@ -138,15 +148,15 @@ BEGIN
     END IF;
 END;
 `;
-const tr_insertar_imagen = `
-  CREATE OR REPLACE TRIGGER tr_insertar_imagen
-  AFTER INSERT ON hilado
-  FOR EACH ROW
-  BEGIN
-      INSERT INTO imagen(nombre, ruta_archivo, producto_id)
-  VALUES(NEW.nombre, NEW.ruta_archivo, NEW.id);
-  END;
-`;
+// const tr_insertar_imagen = `
+//   CREATE OR REPLACE TRIGGER tr_insertar_imagen
+//   AFTER INSERT ON hilado
+//   FOR EACH ROW
+//   BEGIN
+//       INSERT INTO imagen(nombre, ruta_archivo, producto_id)
+//   VALUES(NEW.nombre, NEW.ruta_archivo, NEW.id);
+//   END;
+// `;
 
 const tr_compra_actualizarMateriaPrima = `
 CREATE OR REPLACE TRIGGER tr_compra_actualizarMateriaPrima 
@@ -175,27 +185,6 @@ BEGIN
 END;
 `;
 
-// const tr_tablita = `
-// CREATE OR REPLACE TRIGGER tr_tablita 
-// AFTER UPDATE ON materia_prima FOR EACH ROW
-// BEGIN
-//   DECLARE stock_diff INT;
-//   SET stock_diff = NEW.stock;
-//     INSERT INTO tablita (nombre, stock) VALUES (NEW.nombre, stock_diff);
-// END;
-// ;
-// `;
-
-// const tr_mp_cambiarNombreCompra = `
-//   CREATE OR REPLACE TRIGGER tr_mp_cambiarNombreCompra
-//  AFTER UPDATE ON materia_prima
-// FOR EACH ROW
-// BEGIN
-//   UPDATE compra
-//   SET producto = NEW.nombre
-//   WHERE materia_prima_id = NEW.id;
-// END;
-// `;
 createTablesAndTriggers();
 existsRoleInDataBase();
 
@@ -214,7 +203,7 @@ function createTablesAndTriggers() {
   //CREACION DE TRIGGERS
   load(tr_compra_actualizarMateriaPrima, "TR_ACTUALIZAR_MATERIA_PRIMA");
   load(tr_descontar_stock_hilado, "TR_DESCONTAR_STOCK_HILADO");
-  load(tr_insertar_imagen, "TR_INSERTAR_IMAGEN");
+  // load(tr_insertar_imagen, "TR_INSERTAR_IMAGEN");
   load(tr_mp_cambiarNombreCompra, "TR_CAMBIAR_NOMBRE_COMPRA");
 }
 

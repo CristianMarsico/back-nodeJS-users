@@ -12,6 +12,12 @@ exports.compra = ((req, res) => {
             fecha: req.body.fecha,  // Asegúrate de usar el formato 'YYYY-MM-DD'
         };
 
+        if (COMPRA.cantidad <= 0)
+            return res.status(404).json({ error: "La cantidad debe ser mayor a cero" });
+
+        if (COMPRA.precio_unitario <= 0)
+            return res.status(404).json({ error: "El precio por unidad debe ser mayor a cero" });
+
         const fechaActual = new Date();
         const formattedFechaActual = fechaActual.toISOString().split('T')[0];
         if (COMPRA.fecha > formattedFechaActual)

@@ -14,9 +14,9 @@ exports.add = ((req, res) => {
             stock_buenosAires: req.body.stock_buenosAires,
             precio_venta_mayorista: req.body.precio_venta_mayorista,
             precio_venta_minorista: req.body.precio_venta_minorista,
-            nombre: req.file.originalname,
-            ruta_archivo: req.file.path,
-            descripcion: req.body.descripcion
+            // nombre: req.file.originalname,
+            // ruta_archivo: req.file.path,
+            // descripcion: req.body.descripcion
         }
         addHilado(HILADO, conexion, res)
     } catch (error) {

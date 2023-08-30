@@ -72,7 +72,8 @@ CREATE TABLE IF NOT EXISTS compra(
 const hilado = `
     CREATE TABLE IF NOT EXISTS hilado (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      producto_terminado VARCHAR(50) NOT NULL,
+      producto_terminado VARCHAR(150) NOT NULL,
+      color VARCHAR(50) NOT NULL,
       stock_loberia INT NOT NULL,
       stock_buenosAires INT NOT NULL,
       precio_venta_mayorista DECIMAL(10, 2) NOT NULL,

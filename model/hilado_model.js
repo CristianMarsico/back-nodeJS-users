@@ -1,8 +1,8 @@
 "use strict";
-exports.existsHilado = (producto_terminado, conexion, res) => {
+exports.existsHilado = (producto_terminado, color, conexion, res) => {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT COUNT(*) AS count FROM hilado WHERE producto_terminado = ?';
-        conexion.query(sql, [producto_terminado], (err, resultados) => {
+        const sql = 'SELECT COUNT(*) AS count FROM hilado WHERE producto_terminado = ? AND color = ?';
+        conexion.query(sql, [producto_terminado, color], (err, resultados) => {
             if (err) {
                 return res.status(404).json({ error: 'Error al obtener hilado' });
             }
@@ -54,7 +54,7 @@ exports.addHilado = (HILADO, conexion, res) => {
         try {
             if (err)
                 return res.status(404).json('Error al agregar la hilado:');
-            return res.status(201).json(`Hilado agregada exitosamente! - id: ${result.insertId}`);
+            return res.status(201).json(`Hilado agregado exitosamente! - id: ${result.insertId}`);
         } catch (error) {
             return res.status(500).json("Error de conexion");
         }

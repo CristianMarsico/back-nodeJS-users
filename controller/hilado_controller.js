@@ -2,7 +2,13 @@
 const conexion = require('../database/bd.js');
 // const fs = require('fs');
 // const path = require('path');
-const { addHilado, getAllHilado, getHiladoByName, transferStockBetweenLocations, getCantidadStockCiudad } = require('../model/hilado_model.js');
+const { addHilado,
+    getAllHilado,
+    getHiladoByName,
+    transferStockBetweenLocations,
+    getCantidadStockCiudad,
+    modificarPrecio,
+    incrementarMercaderia } = require('../model/hilado_model.js');
 
 exports.add = ((req, res) => {
 
@@ -72,5 +78,50 @@ exports.transferStockBetweenLocations = (async (req, res) => {
         return res.status(500).json({ error: "Error de servidor" });
     }
 });
+
+exports.modificarPrecio = (async (req, res) => {
+    try {
+        const { id } = req.params;
+        const tipoConsumidor = req.body.tipo_consumidor;
+        const monto = req.body.total;
+
+        if (monto <= 0)
+            return res.status(404).json({ error: "Verifique el valor ingresado" });
+
+        let resultado = await modificarPrecio(id, monto, tipoConsumidor, conexion, res);
+
+        if (resultado.affectedRows > 0)
+            return res.status(201).json("Valor modificado exitosamente");
+        else
+            return res.status(404).json({ error: "No se ha podido modificar el valor" });
+
+    } catch (error) {
+        return res.status(500).json({ error: "Error de servidor" });
+    }
+});
+
+
+exports.incrementarMercaderia = (async (req, res) => {
+    try {
+        const { id } = req.params;
+        const stock = req.body.stock;
+        const total = req.body.total;
+
+        if (total <= 0)
+            return res.status(404).json({ error: "Verifique el valor ingresado" });
+
+        let resultado = await incrementarMercaderia(id, total, stock, conexion, res);
+
+        if (resultado.affectedRows > 0)
+            return res.status(201).json("Stock modificado exitosamente");
+        else
+            return res.status(404).json({ error: "No se ha podido modificar el stock" });
+
+    } catch (error) {
+        return res.status(500).json({ error: "Error de servidor" });
+    }
+});
+
+
 
 

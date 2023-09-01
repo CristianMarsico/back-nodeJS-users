@@ -37,5 +37,8 @@ router.post('/hilado', existsHilado, hilado.add);
 router.get('/hilado', hilado.getAll);
 router.get('/hiladoNombre', hilado.getHiladoByName);
 router.put('/trasferirStock/:id', hilado.transferStockBetweenLocations);
+router.put('/cambiarPrecio/:id', hilado.modificarPrecio);
+router.put('/incrementarMercaderia/:id', hilado.incrementarMercaderia);
+
 
 module.exports = router;

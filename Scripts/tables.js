@@ -56,19 +56,6 @@ CREATE TABLE IF NOT EXISTS compra(
   )
 `;
 
-// const hilado = `
-//     CREATE TABLE IF NOT EXISTS hilado (
-//       id INT AUTO_INCREMENT PRIMARY KEY,
-//       producto_terminado VARCHAR(50) NOT NULL,
-//       stock_loberia INT NOT NULL,
-//       stock_buenosAires INT NOT NULL,
-//       precio_venta_mayorista DECIMAL(10, 2) NOT NULL,
-//       precio_venta_minorista DECIMAL(10, 2) NOT NULL,
-//       nombre VARCHAR(100) NOT NULL,
-//       ruta_archivo VARCHAR(255) NOT NULL,
-//       descripcion VARCHAR(200)
-//     )
-//   `;
 const hilado = `
     CREATE TABLE IF NOT EXISTS hilado (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -103,36 +90,6 @@ const venta = `
   )
 `;
 
-// const tr_compra_actualizarMateriaPrima = `
-// CREATE OR REPLACE TRIGGER tr_compra_actualizarMateriaPrima 
-// AFTER INSERT ON compra
-// FOR EACH ROW
-// BEGIN
-//   DECLARE cantidad INT;
-//   DECLARE stock_actual INT;
-
-//   SELECT NEW.cantidad INTO cantidad;
-
-//   SELECT stock INTO stock_actual
-//   FROM materia_prima
-//   WHERE nombre = LOWER(NEW.producto);
-
-//   IF stock_actual IS NULL THEN
-//     -- La materia prima no existe, se debe agregar
-//     INSERT INTO materia_prima (nombre, stock, precio)
-//     VALUES (LOWER(NEW.producto), cantidad, NEW.precio_unitario);
-
-//   ELSE
-//     -- La materia prima existe, se debe actualizar el stock
-//     UPDATE materia_prima
-//     SET stock = stock + cantidad
-//     WHERE nombre = LOWER(NEW.producto);
-
-//   END IF;
-// END;
-// ;
-// `;
-
 const tr_descontar_stock_hilado = `
 CREATE OR REPLACE TRIGGER tr_descontar_stock_hilado 
 AFTER INSERT ON venta
@@ -149,15 +106,6 @@ BEGIN
     END IF;
 END;
 `;
-// const tr_insertar_imagen = `
-//   CREATE OR REPLACE TRIGGER tr_insertar_imagen
-//   AFTER INSERT ON hilado
-//   FOR EACH ROW
-//   BEGIN
-//       INSERT INTO imagen(nombre, ruta_archivo, producto_id)
-//   VALUES(NEW.nombre, NEW.ruta_archivo, NEW.id);
-//   END;
-// `;
 
 const tr_compra_actualizarMateriaPrima = `
 CREATE OR REPLACE TRIGGER tr_compra_actualizarMateriaPrima 

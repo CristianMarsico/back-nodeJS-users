@@ -108,3 +108,33 @@ exports.transferStockBetweenLocations = (id, cantidad_tranferida, origen, destin
         return res.status(404).json({ error: 'Error al actulizar el Stock.' });
     }
 };
+
+exports.modificarPrecio = (id, monto, tipoConsumidor, conexion, res) => {
+    return new Promise((resolve, reject) => {
+        const sql = `UPDATE hilado SET ${tipoConsumidor} = ? WHERE id = ?`;
+        conexion.query(sql, [monto, id], (err, resultados) => {
+            if (err) {
+                return res.status(404).json({ error: 'Error al modificar el precio' });
+            }
+            if (resultados.affectedRows > 0)
+                return resolve(resultados);
+
+            resolve(null);
+        });
+    });
+};
+
+exports.incrementarMercaderia = (id, total, stock, conexion, res) => {
+    return new Promise((resolve, reject) => {
+        const sql = `UPDATE hilado SET ${stock} = ${stock} + ? WHERE id = ?`;
+        conexion.query(sql, [total, id], (err, resultados) => {
+            if (err) {
+                return res.status(404).json({ error: 'Error al incrementar mercaderia' });
+            }
+            if (resultados.affectedRows > 0)
+                return resolve(resultados);
+
+            resolve(null);
+        });
+    });
+};

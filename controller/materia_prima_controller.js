@@ -8,20 +8,6 @@ const {
     deleteMP,
     updateMP } = require('../model/materiaPrima_model.js');
 
-// exports.updatePrecio = ((req, res) => {
-//     try {
-//         const { id, precio } = req.params;
-//         if (precio > 0) {
-//             updatePrecio(precio, id, res, conexion);
-//             return;
-//         }
-//         else
-//             return res.status(404).json('Revise el valor del precio.');
-//     } catch (e) {
-//         return res.status(500).json("Error de servidor");
-//     }
-// });
-
 exports.getMPByName = (async (req, res) => {
     try {
         let response = await getMPByName(conexion, res);

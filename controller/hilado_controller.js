@@ -15,8 +15,8 @@ exports.add = ((req, res) => {
     try {
 
         const HILADO = {
-            producto_terminado: req.body.producto_terminado,
-            color: req.body.color,
+            producto_terminado: req.body.producto_terminado.toLowerCase(),
+            color: req.body.color.toLowerCase(),
             stock_loberia: req.body.stock_loberia,
             stock_buenosAires: req.body.stock_buenosAires,
             precio_venta_mayorista: req.body.precio_venta_mayorista,

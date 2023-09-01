@@ -1,4 +1,5 @@
 "use strict";
+const bcrypt = require('bcryptjs');
 const conexion = require('../database/bd.js');
 
 const usuario = `
@@ -91,7 +92,7 @@ const venta = `
 `;
 
 const tr_descontar_stock_hilado = `
-CREATE OR REPLACE TRIGGER tr_descontar_stock_hilado 
+CREATE TRIGGER tr_descontar_stock_hilado 
 AFTER INSERT ON venta
 FOR EACH ROW
 BEGIN
@@ -108,7 +109,7 @@ END;
 `;
 
 const tr_compra_actualizarMateriaPrima = `
-CREATE OR REPLACE TRIGGER tr_compra_actualizarMateriaPrima 
+CREATE TRIGGER tr_compra_actualizarMateriaPrima 
 AFTER INSERT ON compra FOR EACH ROW
 BEGIN
   DECLARE stock_diff INT;
@@ -124,7 +125,7 @@ END;
 `;
 
 const tr_mp_cambiarNombreCompra = `
-  CREATE OR REPLACE TRIGGER tr_mp_cambiarNombreCompra
+  CREATE TRIGGER tr_mp_cambiarNombreCompra
  AFTER UPDATE ON materia_prima FOR EACH ROW
 BEGIN
   IF NEW.nombre != OLD.nombre THEN
@@ -134,8 +135,35 @@ BEGIN
 END;
 `;
 
+eliminarTrigger("tr_descontar_stock_hilado")
+  .then(() => {
+    console.log('Trigger eliminado con éxito');
+    // Realiza cualquier otra acción después de eliminar el trigger
+  })
+  .catch((error) => {
+    console.error('Error al eliminar el trigger:', error);
+  });
+eliminarTrigger("tr_compra_actualizarMateriaPrima")
+  .then(() => {
+    console.log('Trigger eliminado con éxito');
+    // Realiza cualquier otra acción después de eliminar el trigger
+  })
+  .catch((error) => {
+    console.error('Error al eliminar el trigger:', error);
+  });
+eliminarTrigger("tr_mp_cambiarNombreCompra")
+  .then(() => {
+    console.log('Trigger eliminado con éxito');
+    // Realiza cualquier otra acción después de eliminar el trigger
+  })
+  .catch((error) => {
+    console.error('Error al eliminar el trigger:', error);
+  });
+
 createTablesAndTriggers();
 existsRoleInDataBase();
+
+crearUsuarioPorDefecto();
 
 function createTablesAndTriggers() {
   //CREACION DE TABLAS
@@ -167,45 +195,101 @@ function existsRoleInDataBase() {
   // Consulta para verificar si existen datos en la tabla role
   const cantidad = 'SELECT COUNT(*) AS count FROM role';
 
-  // Ejecuta la consulta
   conexion.query(cantidad, (error, results) => {
     if (error) {
       console.error('Error al ejecutar la consulta:', error);
-      // conexion.end();
       return;
     }
 
     const count = results[0].count;
     if (count > 0) {
       console.log('La tabla role ya contiene datos.');
-      // conexion.end();
       return;
     }
     insertRole();
-    // conexion.end();
   });
 }
-
-// Carga de Roles predeterminada 
 function insertRole() {
   const roles = [
     { tipo: 'super_admin' },
     { tipo: 'admin' },
     { tipo: 'default' }
-    // Agrega más datos según tus necesidades
   ];
 
-  // Consulta SQL para insertar los datos
   const query = 'INSERT INTO role (tipo) VALUES ?';
-
-  // Ejecutar la consulta con los datos
   conexion.query(query, [roles.map(dato => [dato.tipo])], (error, results) => {
     if (error) {
       console.error('Error al insertar datos: ', error);
     } else {
       console.log('Datos insertados correctamente');
     }
-    //Cerrar la conexión
-    // conexion.end();
   });
 }
+
+function eliminarTrigger(nombre) {
+  return new Promise((resolve, reject) => {
+    const query = `DROP TRIGGER IF EXISTS ${nombre}`;
+    conexion.query(query, (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+
+
+// Función para crear un usuario por defecto con rol de superadministrador
+async function crearUsuarioPorDefecto() {
+  // Consulta para verificar si el usuario por defecto ya existe
+  const consulta = 'SELECT id FROM usuario WHERE nombre = ? AND usuario = ?';
+  const nombrePorDefecto = 'santiago';
+  const usuarioPorDefecto = 'santiago';
+  const pass = "santiago"
+
+  let passHash = await bcrypt.hash(pass, 8);
+
+
+  conexion.query(consulta, [nombrePorDefecto, usuarioPorDefecto], (error, resultados) => {
+    if (error) {
+      console.error('Error al verificar la existencia del usuario:', error);
+      return;
+    }
+
+    if (resultados.length === 0) {
+      // El usuario por defecto no existe, así que lo creamos
+      const nuevoUsuario = {
+        nombre: 'santiago',
+        pass: passHash,
+        usuario: 'santiago',
+        email: 'santiago@santiago.com',
+      };
+
+      // Insertar el nuevo usuario en la tabla 'usuario'
+      conexion.query('INSERT INTO usuario SET ?', nuevoUsuario, (errorInsertar, resu) => {
+        if (errorInsertar) {
+          console.error('Error al insertar el usuario:', errorInsertar);
+        } else {
+          // Obtener el ID del usuario recién insertado
+          const usuarioId = resu.insertId;
+          // Asignar el rol de superadministrador al usuario
+          const asignarRolQuery = 'INSERT INTO usuario_role (usuario_id, rol_id) VALUES (?, ?)';
+          const superadminRoleId = 1; // Ajusta el ID del rol de superadministrador según tu base de datos
+
+          conexion.query(asignarRolQuery, [usuarioId, superadminRoleId], (errorAsignarRol) => {
+            if (errorAsignarRol) {
+              console.error('Error al asignar el rol de superadministrador:', errorAsignarRol);
+            } else {
+              console.log('Usuario por defecto con rol de superadministrador creado con éxito.');
+            }
+          });
+        }
+      });
+    } else {
+      console.log('El usuario por defecto ya existe en la base de datos.');
+    }
+  });
+}
+

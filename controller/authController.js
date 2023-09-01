@@ -14,9 +14,9 @@ exports.register = (async (req, res) => {
         let passHash = await bcrypt.hash(password, 8);
 
         const USUARIO = {
-            nombre: req.body.nombre,
+            nombre: req.body.nombre.toLowerCase(),
             pass: passHash,
-            usuario: req.body.usuario,
+            usuario: req.body.usuario.toLowerCase(),
             email: req.body.email,
         }
 
@@ -65,7 +65,7 @@ function crearRol(id_user, id_rol, conexion, res) {
 exports.login = (async (req, res) => {
 
     try {
-        const user = req.body.usuario
+        const user = req.body.usuario.toLowerCase()
         const pass = req.body.pass
 
         conexion.query('SELECT * FROM usuario WHERE usuario = ?', [user], async (error, results) => {

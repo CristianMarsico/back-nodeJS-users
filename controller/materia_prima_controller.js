@@ -83,11 +83,12 @@ exports.updateMP = (async (req, res) => {
     const { id } = req.params;
     const nombre = req.body.nombre;
     const stock = req.body.stock;
+    const precio = req.body.precio;
     try {
-        if (stock <= 0)
+        if (stock <= 0 || precio <= 0)
             return res.status(404).json({ error: "Verifique el valor ingresado" });
 
-        let response = await updateMP(nombre, stock, id, conexion, res)
+        let response = await updateMP(nombre, precio, stock, id, conexion, res)
         if (response != null)
             return res.status(200).json(`Materia prima actualizada con éxito`);
         else

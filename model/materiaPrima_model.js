@@ -130,10 +130,10 @@ exports.deleteMP = ((id, conexion, res) => {
 });
 
 
-exports.updateMP = ((nombre, stock, id, conexion, res) => {
+exports.updateMP = ((nombre, precio, stock, id, conexion, res) => {
     return new Promise((resolve, reject) => {
-        let sql = 'UPDATE materia_prima SET nombre=?,stock=? WHERE id=?';
-        conexion.query(sql, [nombre, stock, id], (err, resultados) => {
+        let sql = 'UPDATE materia_prima SET nombre=?, precio=? ,stock=? WHERE id=?';
+        conexion.query(sql, [nombre, precio, stock, id], (err, resultados) => {
             try {
                 if (err)
                     return res.status(404).json({ error: 'Error al edtiar' });

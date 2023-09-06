@@ -33,6 +33,7 @@ const materia_Prima = `
 CREATE TABLE IF NOT EXISTS materia_prima(
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL,
+  precio DECIMAL(10, 2) NOT NULL,
   stock INT NOT NULL
 )
 `;
@@ -116,9 +117,9 @@ BEGIN
   SET stock_diff = NEW.cantidad;
   
   IF EXISTS (SELECT 1 FROM materia_prima WHERE nombre = NEW.producto) THEN
-    UPDATE materia_prima SET stock = stock + stock_diff WHERE nombre = NEW.producto;
+    UPDATE materia_prima SET stock = stock + stock_diff, precio = NEW.precio_unitario WHERE nombre = NEW.producto;
   ELSE
-    INSERT INTO materia_prima (nombre, stock) VALUES (NEW.producto, stock_diff);
+    INSERT INTO materia_prima (nombre, precio, stock) VALUES (NEW.producto, NEW.precio_unitario, stock_diff);
   END IF;
 END;
 ;

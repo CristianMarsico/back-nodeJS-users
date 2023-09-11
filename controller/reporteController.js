@@ -23,7 +23,8 @@ exports.reporte = (async (req, res) => {
 
             let total = 0;
             respuesta.forEach((compra) => {
-                doc.text(`FECHA: ${compra.fecha}`);
+                const fechaFormateada = compra.fecha.toLocaleDateString('es-AR');
+                doc.text(`FECHA: ${fechaFormateada}`);
                 doc.text(`COMPRAS REALIZADAS: ${compra.total}`);
                 doc.text(`MATERIA PRIMA: ${compra.producto}`);
                 doc.text(`CANTIDAD COMPRADA: ${compra.total_cantidad} - COSTO UNITARIO: $${compra.precio_unitario}`);

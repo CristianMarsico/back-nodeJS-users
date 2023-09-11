@@ -4,16 +4,18 @@ const { getCantidadStockCiudad, getPrecioComercial } = require('../model/hilado_
 const { addVenta } = require('../model/venta_model.js');
 
 exports.venta = (async (req, res) => {
-
     try {
         const VENTA = {
             producto_id: req.body.producto_id,
+            nombre_prod: req.body.nombre_prod,
+            color: req.body.color,
             cantidad_vendida: req.body.cantidad_vendida,
             precio: 0,
             stock_origen: req.body.origen.toLowerCase(),
-            tipo_venta: req.body.tipo_venta.toLowerCase() //TIPO DE CONSUMIDOR
+            tipo_venta: req.body.tipo_venta.toLowerCase(), //TIPO DE CONSUMIDOR
+            fecha: req.body.fecha,
+            cliente: req.body.cliente
         }
-
         let cantidad = await getCantidadStockCiudad(VENTA.producto_id, VENTA.stock_origen, conexion, res);
 
         // Verificar la disponibilidad en el stock según el origen

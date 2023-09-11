@@ -84,10 +84,14 @@ const venta = `
   CREATE TABLE IF NOT EXISTS venta (
     id INT AUTO_INCREMENT PRIMARY KEY,
     producto_id INT NOT NULL,
+    nombre_prod VARCHAR(100) NOT NULL,
+    color VARCHAR(100) NOT NULL,
     cantidad_vendida INT NOT NULL,
     precio DECIMAL(10, 2) NOT NULL,
     stock_origen ENUM('stock_loberia', 'stock_buenosAires') NOT NULL,
     tipo_venta ENUM('precio_venta_mayorista', 'precio_venta_minorista') NOT NULL,
+    fecha DATE NOT NULL,
+    cliente VARCHAR(100) NOT NULL,
     FOREIGN KEY (producto_id) REFERENCES hilado(id)
   )
 `;

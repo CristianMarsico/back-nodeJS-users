@@ -30,3 +30,18 @@ exports.getCompraFecha = ((min, max, conexion, res) => {
         });
     });
 });
+
+exports.getAllCompras = (conexion, res) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT * FROM compra ORDER BY id DESC';
+        conexion.query(sql, (err, resultados) => {
+            if (err) {
+                return res.status(404).json({ error: 'Error al obtener compras' });
+            }
+            if (resultados.length > 0) {
+                return resolve(resultados);
+            }
+            resolve(null);
+        });
+    });
+};

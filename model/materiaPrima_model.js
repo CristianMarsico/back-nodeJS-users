@@ -29,7 +29,7 @@ exports.getMPByName = (conexion, res) => {
 
 exports.getAllMP = (conexion, res) => {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT * FROM materia_prima';
+        const sql = 'SELECT * FROM materia_prima ORDER BY nombre ASC';
         conexion.query(sql, (err, resultados) => {
             if (err) {
                 return res.status(404).json({ error: 'Error al obtener las materias primas' });

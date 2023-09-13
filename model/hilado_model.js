@@ -63,7 +63,7 @@ exports.addHilado = (HILADO, conexion, res) => {
 
 exports.getAllHilado = (conexion, res) => {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT * FROM hilado';
+        const sql = 'SELECT * FROM hilado ORDER BY producto_terminado, color ASC';
         conexion.query(sql, (err, resultados) => {
             if (err) {
                 return res.status(404).json({ error: 'Error al obtener hilado' });

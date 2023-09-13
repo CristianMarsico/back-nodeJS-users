@@ -97,7 +97,7 @@ const venta = `
 `;
 
 const tr_descontar_stock_hilado = `
-CREATE TRIGGER tr_descontar_stock_hilado 
+CREATE OR REPLACE TRIGGER tr_descontar_stock_hilado 
 AFTER INSERT ON venta
 FOR EACH ROW
 BEGIN
@@ -114,7 +114,7 @@ END;
 `;
 
 const tr_compra_actualizarMateriaPrima = `
-CREATE TRIGGER tr_compra_actualizarMateriaPrima 
+CREATE OR REPLACE TRIGGER tr_compra_actualizarMateriaPrima 
 AFTER INSERT ON compra FOR EACH ROW
 BEGIN
   DECLARE stock_diff INT;
@@ -130,7 +130,7 @@ END;
 `;
 
 const tr_mp_cambiarNombreCompra = `
-  CREATE TRIGGER tr_mp_cambiarNombreCompra
+  CREATE OR REPLACE TRIGGER tr_mp_cambiarNombreCompra
  AFTER UPDATE ON materia_prima FOR EACH ROW
 BEGIN
   IF NEW.nombre != OLD.nombre THEN
@@ -140,30 +140,30 @@ BEGIN
 END;
 `;
 
-eliminarTrigger("tr_descontar_stock_hilado")
-  .then(() => {
-    console.log('Trigger eliminado con éxito');
-    // Realiza cualquier otra acción después de eliminar el trigger
-  })
-  .catch((error) => {
-    console.error('Error al eliminar el trigger:', error);
-  });
-eliminarTrigger("tr_compra_actualizarMateriaPrima")
-  .then(() => {
-    console.log('Trigger eliminado con éxito');
-    // Realiza cualquier otra acción después de eliminar el trigger
-  })
-  .catch((error) => {
-    console.error('Error al eliminar el trigger:', error);
-  });
-eliminarTrigger("tr_mp_cambiarNombreCompra")
-  .then(() => {
-    console.log('Trigger eliminado con éxito');
-    // Realiza cualquier otra acción después de eliminar el trigger
-  })
-  .catch((error) => {
-    console.error('Error al eliminar el trigger:', error);
-  });
+// eliminarTrigger("tr_descontar_stock_hilado")
+//   .then(() => {
+//     console.log('Trigger eliminado con éxito');
+//     // Realiza cualquier otra acción después de eliminar el trigger
+//   })
+//   .catch((error) => {
+//     console.error('Error al eliminar el trigger:', error);
+//   });
+// eliminarTrigger("tr_compra_actualizarMateriaPrima")
+//   .then(() => {
+//     console.log('Trigger eliminado con éxito');
+//     // Realiza cualquier otra acción después de eliminar el trigger
+//   })
+//   .catch((error) => {
+//     console.error('Error al eliminar el trigger:', error);
+//   });
+// eliminarTrigger("tr_mp_cambiarNombreCompra")
+//   .then(() => {
+//     console.log('Trigger eliminado con éxito');
+//     // Realiza cualquier otra acción después de eliminar el trigger
+//   })
+//   .catch((error) => {
+//     console.error('Error al eliminar el trigger:', error);
+//   });
 
 createTablesAndTriggers();
 existsRoleInDataBase();
@@ -231,18 +231,18 @@ function insertRole() {
   });
 }
 
-function eliminarTrigger(nombre) {
-  return new Promise((resolve, reject) => {
-    const query = `DROP TRIGGER IF EXISTS ${nombre}`;
-    conexion.query(query, (error, results) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
-}
+// function eliminarTrigger(nombre) {
+//   return new Promise((resolve, reject) => {
+//     const query = `DROP TRIGGER IF EXISTS ${nombre}`;
+//     conexion.query(query, (error, results) => {
+//       if (error) {
+//         reject(error);
+//       } else {
+//         resolve(results);
+//       }
+//     });
+//   });
+// }
 
 
 

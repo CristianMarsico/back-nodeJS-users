@@ -28,3 +28,18 @@ exports.getVentaFecha = ((min, max, conexion, res) => {
         });
     });
 });
+
+exports.getAllVentas = (conexion, res) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT * FROM venta ORDER BY id DESC';
+        conexion.query(sql, (err, resultados) => {
+            if (err) {
+                return res.status(404).json({ error: 'Error al obtener ventas' });
+            }
+            if (resultados.length > 0) {
+                return resolve(resultados);
+            }
+            resolve(null);
+        });
+    });
+};

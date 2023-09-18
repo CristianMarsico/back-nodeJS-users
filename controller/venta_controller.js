@@ -1,21 +1,23 @@
 "use strict";
 const conexion = require('../database/bd.js');
 const { getCantidadStockCiudad, getPrecioComercial } = require('../model/hilado_model.js');
-const { addVenta } = require('../model/venta_model.js');
+const { addVenta, getAllVentas } = require('../model/venta_model.js');
 
 exports.venta = (async (req, res) => {
     try {
         const VENTA = {
             producto_id: req.body.producto_id,
-            nombre_prod: req.body.nombre_prod,
-            color: req.body.color,
+            nombre_prod: req.body.nombre_prod.toLowerCase(),
+            color: req.body.color.toLowerCase(),
             cantidad_vendida: req.body.cantidad_vendida,
             precio: 0,
             stock_origen: req.body.origen.toLowerCase(),
             tipo_venta: req.body.tipo_venta.toLowerCase(), //TIPO DE CONSUMIDOR
             fecha: req.body.fecha,
-            cliente: req.body.cliente
+            cliente: req.body.cliente.toLowerCase(),
+            medio_pago: req.body.medio_pago.toLowerCase()
         }
+
         let cantidad = await getCantidadStockCiudad(VENTA.producto_id, VENTA.stock_origen, conexion, res);
 
         // Verificar la disponibilidad en el stock según el origen
@@ -37,6 +39,18 @@ exports.venta = (async (req, res) => {
             }
             return res.status(404).json({ error: `Ocurrió un error al intetar agregar` });
         }
+    } catch (error) {
+        return res.status(500).json({ error: "Error de servidor" });
+    }
+});
+
+exports.getAll = (async (req, res) => {
+    try {
+
+        let response = await getAllVentas(conexion, res);
+        if (response != null)
+            return res.status(200).json({ response });
+        return res.status(404).json({ error: "No hay ventas registradas" });
     } catch (error) {
         return res.status(500).json({ error: "Error de servidor" });
     }

@@ -92,6 +92,7 @@ const venta = `
     tipo_venta ENUM('precio_venta_mayorista', 'precio_venta_minorista') NOT NULL,
     fecha DATE NOT NULL,
     cliente VARCHAR(100) NOT NULL,
+    medio_pago VARCHAR(100) NOT NULL,
     FOREIGN KEY (producto_id) REFERENCES hilado(id)
   )
 `;

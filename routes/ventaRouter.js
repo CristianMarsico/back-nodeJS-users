@@ -12,6 +12,7 @@ const { existsHilado } = require('../middlewares/existsHilado.js');
 
 //ENDPOINTS
 router.post('/venta', requiereToken, existsHilado, venta.venta);
+router.get('/getAllVentas', requiereToken, existsHilado, venta.getAll);
 router.get('/reporteVenta/:fechaMin/:fechaMax', reporteVenta.reporteVenta);
 
 module.exports = router;

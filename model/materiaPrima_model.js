@@ -1,17 +1,5 @@
 "use strict";
 
-// exports.updatePrecio = ((precio, id, res, conexion) => {
-//     try {
-//         conexion.query('UPDATE materia_prima SET precio = ? WHERE id = ?', [precio, id], (err, results) => {
-//             if (err) throw err;
-//             return res.status(200).json('Precio actualizado correctamente.');
-//         });
-//     } catch (error) {
-//         return res.status(500).json({ error: "Error de conexion" });
-//     }
-// });
-
-
 exports.getMPByName = (conexion, res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT nombre FROM materia_prima';

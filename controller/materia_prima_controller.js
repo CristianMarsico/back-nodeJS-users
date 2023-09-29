@@ -37,7 +37,7 @@ exports.updateStock = (async (req, res) => {
     try {
         const { id } = req.params;
         const cantidad = req.body.cantidad;
-        const nombre = req.body.nombre;
+        const nombre = req.body.nombre.toLowerCase();
         const fecha = req.body.fecha;
 
         const fechaActual = new Date();
@@ -81,7 +81,7 @@ exports.deleteMP = (async (req, res) => {
 exports.updateMP = (async (req, res) => {
 
     const { id } = req.params;
-    const nombre = req.body.nombre;
+    const nombre = req.body.nombre.toLowerCase();
     const stock = req.body.stock;
     const precio = req.body.precio;
     try {

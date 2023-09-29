@@ -7,8 +7,8 @@ const multer = require('multer');
 
 //HACEMOS USO DEL CONTROLADOR
 const hilado = require('../controller/hilado_controller');
-
 //HACEMOS USO DE LOS MIDDLEWARES
+const { requiereToken } = require('../middlewares/requiereToken.js');
 const { existsHilado } = require('../middlewares/existsHilado.js');
 
 
@@ -33,12 +33,14 @@ const { existsHilado } = require('../middlewares/existsHilado.js');
 
 //ENDPOINTS
 // router.post('/hilado', upload.single('imagen'), hilado.add);
-router.post('/hilado', existsHilado, hilado.add);
-router.get('/hilado', hilado.getAll);
-router.get('/hiladoNombre', hilado.getHiladoByName);
-router.put('/trasferirStock/:id', hilado.transferStockBetweenLocations);
-router.put('/cambiarPrecio/:id', hilado.modificarPrecio);
-router.put('/incrementarMercaderia/:id', hilado.incrementarMercaderia);
+router.get('/hilado', requiereToken, hilado.getAll);
+router.get('/hiladoNombre', requiereToken, hilado.getHiladoByName);
+
+router.post('/hilado', requiereToken, existsHilado, hilado.add);
+
+router.put('/trasferirStock/:id', requiereToken, hilado.transferStockBetweenLocations);
+router.put('/cambiarPrecio/:id', requiereToken, hilado.modificarPrecio);
+router.put('/incrementarMercaderia/:id', requiereToken, hilado.incrementarMercaderia);
 
 
 module.exports = router;

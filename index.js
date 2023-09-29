@@ -54,7 +54,8 @@ app.use('/api', require('./routes/materiaPrimaRouter.js'));
 app.use('/api', require('./routes/compraRouter.js'));
 app.use('/api', require('./routes/ventaRouter.js'));
 app.use('/api', require('./routes/hiladoRouter.js'));
-app.use('/api', require('./routes/ImagenRouter.js'));
+app.use('/api', require('./routes/clienteRouter.js'));
+// app.use('/api', require('./routes/ImagenRouter.js'));
 
 app.listen(3000, () => {
     console.log("👍👍👍 Escuchando en el puerto 3000");

@@ -15,7 +15,10 @@ exports.venta = (async (req, res) => {
             tipo_venta: req.body.tipo_venta.toLowerCase(), //TIPO DE CONSUMIDOR
             fecha: req.body.fecha,
             cliente: req.body.cliente.toLowerCase(),
-            medio_pago: req.body.medio_pago.toLowerCase()
+            medio_pago: req.body.medio_pago.toLowerCase(),
+            email: req.body.email.toLowerCase(),
+            telefono: req.body.telefono.toLowerCase(),
+            direccion: req.body.direccion.toLowerCase(),
         }
 
         let cantidad = await getCantidadStockCiudad(VENTA.producto_id, VENTA.stock_origen, conexion, res);

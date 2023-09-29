@@ -70,15 +70,15 @@ const hilado = `
     )
   `;
 
-const imagen = `
-    CREATE TABLE IF NOT EXISTS imagen (
-       id_imagen INT AUTO_INCREMENT PRIMARY KEY,
-       nombre VARCHAR(100) NOT NULL,
-       ruta_archivo VARCHAR(255) NOT NULL,
-       producto_id INT,
-      FOREIGN KEY (producto_id) REFERENCES hilado(id)
-    )
-  `;
+// const imagen = `
+//     CREATE TABLE IF NOT EXISTS imagen (
+//        id_imagen INT AUTO_INCREMENT PRIMARY KEY,
+//        nombre VARCHAR(100) NOT NULL,
+//        ruta_archivo VARCHAR(255) NOT NULL,
+//        producto_id INT,
+//       FOREIGN KEY (producto_id) REFERENCES hilado(id)
+//     )
+//   `;
 
 const venta = `
   CREATE TABLE IF NOT EXISTS venta (
@@ -93,12 +93,26 @@ const venta = `
     fecha DATE NOT NULL,
     cliente VARCHAR(100) NOT NULL,
     medio_pago VARCHAR(100) NOT NULL,
+    direccion VARCHAR(100) NULL,
+    email VARCHAR(100) NULL,
+    telefono VARCHAR(100) NULL,
     FOREIGN KEY (producto_id) REFERENCES hilado(id)
   )
 `;
 
+const cliente = `
+  CREATE TABLE IF NOT EXISTS cliente (
+    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    direccion VARCHAR(100) NULL,
+    email VARCHAR(100) NULL,
+    telefono VARCHAR(100) NULL
+  )
+`;
+
+
 const tr_descontar_stock_hilado = `
-CREATE OR REPLACE TRIGGER tr_descontar_stock_hilado 
+CREATE TRIGGER tr_descontar_stock_hilado 
 AFTER INSERT ON venta
 FOR EACH ROW
 BEGIN
@@ -115,7 +129,7 @@ END;
 `;
 
 const tr_compra_actualizarMateriaPrima = `
-CREATE OR REPLACE TRIGGER tr_compra_actualizarMateriaPrima 
+CREATE TRIGGER tr_compra_actualizarMateriaPrima 
 AFTER INSERT ON compra FOR EACH ROW
 BEGIN
   DECLARE stock_diff INT;
@@ -131,7 +145,7 @@ END;
 `;
 
 const tr_mp_cambiarNombreCompra = `
-  CREATE OR REPLACE TRIGGER tr_mp_cambiarNombreCompra
+  CREATE TRIGGER tr_mp_cambiarNombreCompra
  AFTER UPDATE ON materia_prima FOR EACH ROW
 BEGIN
   IF NEW.nombre != OLD.nombre THEN
@@ -141,30 +155,60 @@ BEGIN
 END;
 `;
 
-// eliminarTrigger("tr_descontar_stock_hilado")
-//   .then(() => {
-//     console.log('Trigger eliminado con éxito');
-//     // Realiza cualquier otra acción después de eliminar el trigger
-//   })
-//   .catch((error) => {
-//     console.error('Error al eliminar el trigger:', error);
-//   });
-// eliminarTrigger("tr_compra_actualizarMateriaPrima")
-//   .then(() => {
-//     console.log('Trigger eliminado con éxito');
-//     // Realiza cualquier otra acción después de eliminar el trigger
-//   })
-//   .catch((error) => {
-//     console.error('Error al eliminar el trigger:', error);
-//   });
-// eliminarTrigger("tr_mp_cambiarNombreCompra")
-//   .then(() => {
-//     console.log('Trigger eliminado con éxito');
-//     // Realiza cualquier otra acción después de eliminar el trigger
-//   })
-//   .catch((error) => {
-//     console.error('Error al eliminar el trigger:', error);
-//   });
+
+const tr_cargarCliente = `
+  CREATE TRIGGER tr_cargarCliente
+AFTER INSERT ON venta FOR EACH ROW
+BEGIN
+    DECLARE cliente_id INT;
+    
+    -- Verificar si el cliente ya existe
+    SELECT id_cliente INTO cliente_id
+    FROM cliente
+    WHERE nombre = NEW.cliente;
+    
+    -- Si el cliente no existe, insertarlo
+    IF cliente_id IS NULL THEN
+        INSERT INTO cliente (nombre, direccion, email, telefono)
+        VALUES (NEW.cliente, NEW.direccion, NEW.email, NEW.telefono);
+    ELSE
+      UPDATE cliente SET direccion = NEW.direccion, email = NEW.email, telefono = NEW.telefono WHERE nombre = NEW.cliente;   
+    END IF;
+END;
+`;
+
+eliminarTrigger("tr_descontar_stock_hilado")
+  .then(() => {
+    console.log('Trigger eliminado con éxito');
+    // Realiza cualquier otra acción después de eliminar el trigger
+  })
+  .catch((error) => {
+    console.error('Error al eliminar el trigger:', error);
+  });
+eliminarTrigger("tr_compra_actualizarMateriaPrima")
+  .then(() => {
+    console.log('Trigger eliminado con éxito');
+    // Realiza cualquier otra acción después de eliminar el trigger
+  })
+  .catch((error) => {
+    console.error('Error al eliminar el trigger:', error);
+  });
+eliminarTrigger("tr_mp_cambiarNombreCompra")
+  .then(() => {
+    console.log('Trigger eliminado con éxito');
+    // Realiza cualquier otra acción después de eliminar el trigger
+  })
+  .catch((error) => {
+    console.error('Error al eliminar el trigger:', error);
+  });
+eliminarTrigger("tr_cargarCliente")
+  .then(() => {
+    console.log('Trigger eliminado con éxito');
+    // Realiza cualquier otra acción después de eliminar el trigger
+  })
+  .catch((error) => {
+    console.error('Error al eliminar el trigger:', error);
+  });
 
 createTablesAndTriggers();
 existsRoleInDataBase();
@@ -180,14 +224,15 @@ function createTablesAndTriggers() {
   load(compra, "COMPRA");
   load(hilado, "HILADO");
   load(venta, "VENTA");
-  load(imagen, "IMAGEN");
+  // load(imagen, "IMAGEN");
   load(enProduccion, "EN_PRODUCCION");
+  load(cliente, "CLIENTE");
 
   //CREACION DE TRIGGERS
   load(tr_compra_actualizarMateriaPrima, "TR_ACTUALIZAR_MATERIA_PRIMA");
   load(tr_descontar_stock_hilado, "TR_DESCONTAR_STOCK_HILADO");
-  // load(tr_insertar_imagen, "TR_INSERTAR_IMAGEN");
   load(tr_mp_cambiarNombreCompra, "TR_CAMBIAR_NOMBRE_COMPRA");
+  load(tr_cargarCliente, "TR_CARGAR_CLIENTE");
 }
 
 function load(tabla, nombre) {
@@ -232,18 +277,18 @@ function insertRole() {
   });
 }
 
-// function eliminarTrigger(nombre) {
-//   return new Promise((resolve, reject) => {
-//     const query = `DROP TRIGGER IF EXISTS ${nombre}`;
-//     conexion.query(query, (error, results) => {
-//       if (error) {
-//         reject(error);
-//       } else {
-//         resolve(results);
-//       }
-//     });
-//   });
-// }
+function eliminarTrigger(nombre) {
+  return new Promise((resolve, reject) => {
+    const query = `DROP TRIGGER IF EXISTS ${nombre}`;
+    conexion.query(query, (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
 
 
 

@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 exports.generateToken = (id, user, name) => {
     try {
-        let tiempoVidaToken = Math.floor(Date.now() / 1000) + (60 * 60); //Una Hora
+        let tiempoVidaToken = 60 * 30; //Una Hora
 
         //EL SIGN CONTIENE EL PAYLOAD QUE ES LA INFORMACION DEL USUARIO
         let token = jwt.sign({ id, user, name }, process.env.JWT_SECRET, { expiresIn: tiempoVidaToken });
@@ -16,7 +16,7 @@ exports.generateToken = (id, user, name) => {
 }
 
 exports.generateRefreshToken = (id, user, name, res) => {
-    let expiresIn = Math.floor(Date.now() / 1000) + (60 * 60); //Una Hora
+    let expiresIn = 60 * 30; //Una Hora
     try {
         let refreshToken = jwt.sign({ id, user, name }, process.env.JWT_REFRESH, { expiresIn });
 

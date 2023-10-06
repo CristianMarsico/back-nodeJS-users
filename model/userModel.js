@@ -65,10 +65,10 @@ exports.deleteUser = ((id, conexion, res) => {
     });
 });
 
-exports.updateUser = ((id, nombre, email, conexion, res) => {
+exports.updateUser = ((id, nombre, conexion, res) => {
     return new Promise((resolve, reject) => {
-        let sql = 'UPDATE usuario SET nombre= ?, email=? WHERE id = ?';
-        conexion.query(sql, [nombre, email, id], (err, resultados) => {
+        let sql = 'UPDATE usuario SET usuario= ? WHERE id = ?';
+        conexion.query(sql, [nombre, id], (err, resultados) => {
             try {
                 if (err)
                     return res.status(404).json({ error: 'Error al editar usuario' });

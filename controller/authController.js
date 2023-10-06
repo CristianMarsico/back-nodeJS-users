@@ -97,8 +97,8 @@ exports.login = (async (req, res) => {
     }
 })
 
-exports.info = ((req, res) => {
-    let id = req.new_id
+exports.getUserByID = ((req, res) => {
+    const { id } = req.params;
     let sql = 'SELECT * FROM usuario WHERE id = ?'
     conexion.query(sql, [id], (err, results) => {
 
@@ -109,8 +109,8 @@ exports.info = ((req, res) => {
                 throw new Error("No existe usuario con ese id ")
             else {
                 let user = results[0].usuario
-                let rol = results[0].rol
-                res.status(200).json({ id, user, rol })
+                let nombre = results[0].nombre
+                res.status(200).json({ id, user, nombre })
             }
         } catch (e) {
             return res.status(401).json({ error: e.message });
@@ -172,12 +172,9 @@ exports.deleteUser = (async (req, res) => {
 exports.updateUser = (async (req, res) => {
 
     const { id, } = req.params;
-    const nombre = req.body.nombre;
-    const email = req.body.email;
-
-    console.log(id, nombre, email)
+    const usuario = req.body.usuario.toLowerCase()
     try {
-        let response = await updateUser(id, nombre, email, conexion, res);
+        let response = await updateUser(id, usuario, conexion, res);
         if (response != null)  // un error indica que hubo problemas con la consulta
             return res.status(200).json(`Usuario actualizado con éxito`);
         else

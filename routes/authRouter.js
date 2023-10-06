@@ -54,7 +54,7 @@ router.get('/getAll', authController.getAllUser)
 
 
 
-router.get('/info', requiereToken, authController.info)
+router.get('/getUserById/:id', authController.getUserByID)
 
 router.get('/refreshToken', requireRefreshToken, authController.refreshToken)
 

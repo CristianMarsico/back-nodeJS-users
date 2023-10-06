@@ -295,15 +295,16 @@ function eliminarTrigger(nombre) {
 // Función para crear un usuario por defecto con rol de superadministrador
 async function crearUsuarioPorDefecto() {
   // Consulta para verificar si el usuario por defecto ya existe
-  const consulta = 'SELECT id FROM usuario WHERE nombre = ? AND usuario = ?';
+  const consulta = 'SELECT id FROM usuario WHERE id = ?';
   const nombrePorDefecto = 'santiago';
   const usuarioPorDefecto = 'santiago';
   const pass = "santiago"
+  const id = 1;
 
   let passHash = await bcrypt.hash(pass, 8);
 
 
-  conexion.query(consulta, [nombrePorDefecto, usuarioPorDefecto], (error, resultados) => {
+  conexion.query(consulta, [id], (error, resultados) => {
     if (error) {
       console.error('Error al verificar la existencia del usuario:', error);
       return;

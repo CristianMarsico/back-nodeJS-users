@@ -1,5 +1,5 @@
 "use strict";
-const conexion = require('../database/bd.js');
+
 const {
     updateStock,
     getMPByName,
@@ -10,7 +10,7 @@ const {
 
 exports.getMPByName = (async (req, res) => {
     try {
-        let response = await getMPByName(conexion, res);
+        let response = await getMPByName(res);
         if (response != null)
             return res.status(200).json({ response });
         return res.status(404).json({ error: "No hay Materia Prima en la base de datos" });
@@ -22,7 +22,7 @@ exports.getMPByName = (async (req, res) => {
 
 exports.getAllMP = (async (req, res) => {
     try {
-        let response = await getAllMP(conexion, res);
+        let response = await getAllMP(res);
         if (response != null)
             return res.status(200).json({ response });
         return res.status(404).json({ error: "No hay Materia Prima en la base de datos" });
@@ -48,13 +48,13 @@ exports.updateStock = (async (req, res) => {
         if (cantidad <= 0)
             return res.status(404).json({ error: "Verifique el valor ingresado" });
 
-        let total = await getStockMP(id, conexion, res);
+        let total = await getStockMP(id, res);
         let stockDisponible = total[0].stock
         if (stockDisponible == 0)
             return res.status(404).json({ error: "No dispone de stock" });
 
         if (stockDisponible >= cantidad)
-            updateStock(id, cantidad, nombre, fecha, conexion, res);
+            updateStock(id, cantidad, nombre, fecha, res);
         else
             return res.status(404).json({ error: "No dispone esa cantidad" });
 
@@ -68,7 +68,7 @@ exports.deleteMP = (async (req, res) => {
 
     const { id } = req.params;
     try {
-        let response = await deleteMP(id, conexion, res)
+        let response = await deleteMP(id, res)
         if (response != null)
             return res.status(200).json(`Materia prima borrada con éxito`);
         else
@@ -88,7 +88,7 @@ exports.updateMP = (async (req, res) => {
         if (stock <= 0 || precio <= 0)
             return res.status(404).json({ error: "Verifique el valor ingresado" });
 
-        let response = await updateMP(nombre, precio, stock, id, conexion, res)
+        let response = await updateMP(nombre, precio, stock, id, res)
         if (response != null)
             return res.status(200).json(`Materia prima actualizada con éxito`);
         else

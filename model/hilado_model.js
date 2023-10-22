@@ -1,5 +1,7 @@
 "use strict";
-exports.existsHilado = (producto_terminado, color, conexion, res) => {
+const { conexion } = require('../database/bd2.js');
+
+exports.existsHilado = (producto_terminado, color, res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT COUNT(*) AS count FROM hilado WHERE producto_terminado = ? AND color = ?';
         conexion.query(sql, [producto_terminado, color], (err, resultados) => {
@@ -14,7 +16,7 @@ exports.existsHilado = (producto_terminado, color, conexion, res) => {
     });
 };
 
-exports.getCantidadStockCiudad = (producto_id, stock_origen, conexion, res) => {
+exports.getCantidadStockCiudad = (producto_id, stock_origen, res) => {
     return new Promise((resolve, reject) => {
         const totaStock = stock_origen === 'stock_loberia' ? 'stock_loberia' : 'stock_buenosAires';
         const sql = `SELECT ${totaStock} AS stock FROM hilado WHERE id = ?`;
@@ -30,7 +32,7 @@ exports.getCantidadStockCiudad = (producto_id, stock_origen, conexion, res) => {
     });
 };
 
-exports.getPrecioComercial = (producto_id, tipo_venta, conexion, res) => {
+exports.getPrecioComercial = (producto_id, tipo_venta, res) => {
     return new Promise((resolve, reject) => {
         //CURDATE() -> DIA ACTUAL
         // const consulta = 'SELECT * FROM compra WHERE DAY(CURDATE()) = 17 and MONTH(fecha)= MONTH(CURDATE()) -1';
@@ -49,7 +51,7 @@ exports.getPrecioComercial = (producto_id, tipo_venta, conexion, res) => {
         });
     });
 };
-exports.addHilado = (HILADO, conexion, res) => {
+exports.addHilado = (HILADO, res) => {
     conexion.query('INSERT INTO hilado SET ?', HILADO, (err, result) => {
         try {
             if (err)
@@ -61,7 +63,7 @@ exports.addHilado = (HILADO, conexion, res) => {
     });
 };
 
-exports.getAllHilado = (conexion, res) => {
+exports.getAllHilado = (res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM hilado ORDER BY producto_terminado, color ASC';
         conexion.query(sql, (err, resultados) => {
@@ -76,7 +78,7 @@ exports.getAllHilado = (conexion, res) => {
     });
 };
 
-exports.getHiladoByName = (conexion, res) => {
+exports.getHiladoByName = (res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT id, producto_terminado FROM hilado';
         conexion.query(sql, (err, resultados) => {
@@ -91,7 +93,7 @@ exports.getHiladoByName = (conexion, res) => {
     });
 };
 
-exports.transferStockBetweenLocations = (id, cantidad_tranferida, origen, destino, conexion, res) => {
+exports.transferStockBetweenLocations = (id, cantidad_tranferida, origen, destino, res) => {
 
     try {
         const updateOrigenQuery = `UPDATE hilado SET ${origen} = ${origen} - ? WHERE id = ?`;
@@ -109,7 +111,7 @@ exports.transferStockBetweenLocations = (id, cantidad_tranferida, origen, destin
     }
 };
 
-exports.modificarPrecio = (id, monto, tipoConsumidor, conexion, res) => {
+exports.modificarPrecio = (id, monto, tipoConsumidor, res) => {
     return new Promise((resolve, reject) => {
         const sql = `UPDATE hilado SET ${tipoConsumidor} = ? WHERE id = ?`;
         conexion.query(sql, [monto, id], (err, resultados) => {
@@ -124,7 +126,7 @@ exports.modificarPrecio = (id, monto, tipoConsumidor, conexion, res) => {
     });
 };
 
-exports.incrementarMercaderia = (id, total, stock, conexion, res) => {
+exports.incrementarMercaderia = (id, total, stock, res) => {
     return new Promise((resolve, reject) => {
         const sql = `UPDATE hilado SET ${stock} = ${stock} + ? WHERE id = ?`;
         conexion.query(sql, [total, id], (err, resultados) => {

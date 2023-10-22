@@ -1,6 +1,8 @@
 "use strict";
+
+const { conexion } = require('../database/bd2.js');
 //Agrega la compra a la BD.
-exports.addCompra = ((COMPRA, conexion, res) => {
+exports.addCompra = ((COMPRA, res) => {
     // Inserta la compra en la base de datos
     conexion.query('INSERT INTO compra SET ?', COMPRA, (err, result) => {
         try {
@@ -14,7 +16,7 @@ exports.addCompra = ((COMPRA, conexion, res) => {
 });
 
 //Retorna el resultados con las compras realizadas en una fecha dada.
-exports.getCompraFecha = ((min, max, conexion, res) => {
+exports.getCompraFecha = ((min, max, res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT COUNT(producto) as total, producto, precio_unitario, fecha, SUM(cantidad) as total_cantidad, SUM(total) as total_compra FROM compra WHERE fecha BETWEEN ? AND ? GROUP BY producto, fecha, precio_unitario ORDER BY fecha';
         conexion.query(sql, [min, max], (err, resultados) => {
@@ -31,7 +33,7 @@ exports.getCompraFecha = ((min, max, conexion, res) => {
     });
 });
 
-exports.getAllCompras = (conexion, res) => {
+exports.getAllCompras = (res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM compra ORDER BY id DESC';
         conexion.query(sql, (err, resultados) => {

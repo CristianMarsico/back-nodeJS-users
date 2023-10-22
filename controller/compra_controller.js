@@ -1,5 +1,5 @@
 "use strict";
-const conexion = require('../database/bd.js');
+
 const { addCompra, getAllCompras } = require('../model/compra_model.js');
 
 exports.compra = ((req, res) => {
@@ -22,7 +22,7 @@ exports.compra = ((req, res) => {
         const formattedFechaActual = fechaActual.toISOString().split('T')[0];
         if (COMPRA.fecha > formattedFechaActual)
             return res.status(404).json({ error: 'Revise la fecha. No puede registrar compras futuras' });
-        addCompra(COMPRA, conexion, res);
+        addCompra(COMPRA, res);
     } catch (error) {
         return res.status(500).json({ error: "Error de servidor" });
     }
@@ -31,7 +31,7 @@ exports.compra = ((req, res) => {
 exports.getAll = (async (req, res) => {
     try {
 
-        let response = await getAllCompras(conexion, res);
+        let response = await getAllCompras(res);
         if (response != null)
             return res.status(200).json({ response });
         return res.status(404).json({ error: "No hay compras registradas" });

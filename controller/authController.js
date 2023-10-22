@@ -1,7 +1,7 @@
 "use strict";
 
 const bcrypt = require('bcryptjs');
-const conexion = require('../database/bd.js');
+const { conexion } = require('../database/bd2.js');
 const { addRol, verificarExistenciaRol } = require('../model/rol_model.js');
 const { getUserByNameAndUserName, addUser, deleteUser, updateUser } = require('../model/userModel.js');
 const { generateToken, generateRefreshToken } = require('../utils/tokenManager.js');

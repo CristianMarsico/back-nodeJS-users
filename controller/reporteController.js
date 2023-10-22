@@ -1,5 +1,5 @@
 "use strict";
-const conexion = require('../database/bd.js');
+
 const { getCompraFecha } = require('../model/compra_model.js');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
@@ -11,7 +11,7 @@ exports.reporte = (async (req, res) => {
     const { fechaMax } = req.params;
 
     try {
-        let respuesta = await getCompraFecha(fechaMin, fechaMax, conexion, res);
+        let respuesta = await getCompraFecha(fechaMin, fechaMax, res);
         if (respuesta != null) {
             const outputPath = 'reporteCompra.pdf';
             const doc = new PDFDocument();

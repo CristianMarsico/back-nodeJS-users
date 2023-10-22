@@ -1,6 +1,6 @@
 "use strict";
 
-const conexion = require('../database/bd.js');
+const { conexion } = require('../database/bd2.js');
 
 exports.existsMateriaPrima = (req, res, next) => {
 

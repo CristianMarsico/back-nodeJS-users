@@ -1,5 +1,5 @@
 "use strict";
-const conexion = require('../database/bd.js');
+
 const { getCantidadStockCiudad, getPrecioComercial } = require('../model/hilado_model.js');
 const { addVenta, getAllVentas } = require('../model/venta_model.js');
 
@@ -21,7 +21,7 @@ exports.venta = (async (req, res) => {
             direccion: req.body.direccion.toLowerCase(),
         }
 
-        let cantidad = await getCantidadStockCiudad(VENTA.producto_id, VENTA.stock_origen, conexion, res);
+        let cantidad = await getCantidadStockCiudad(VENTA.producto_id, VENTA.stock_origen, res);
 
         // Verificar la disponibilidad en el stock según el origen
         const stockDisponible = cantidad[0].stock >= VENTA.cantidad_vendida;
@@ -33,11 +33,11 @@ exports.venta = (async (req, res) => {
                 return res.status(404).json({ error: `Revise el valor ingresado` });
 
             // Verificar eñ precio dependiendo si es MAYORISTA O MINORISTA
-            let precio = await getPrecioComercial(VENTA.producto_id, VENTA.tipo_venta, conexion, res);
+            let precio = await getPrecioComercial(VENTA.producto_id, VENTA.tipo_venta, res);
 
             if (precio != null) {
                 VENTA.precio = (VENTA.cantidad_vendida * precio[0].precio);
-                addVenta(VENTA, conexion, res);
+                addVenta(VENTA, res);
                 return;
             }
             return res.status(404).json({ error: `Ocurrió un error al intetar agregar` });
@@ -50,7 +50,7 @@ exports.venta = (async (req, res) => {
 exports.getAll = (async (req, res) => {
     try {
 
-        let response = await getAllVentas(conexion, res);
+        let response = await getAllVentas(res);
         if (response != null)
             return res.status(200).json({ response });
         return res.status(404).json({ error: "No hay ventas registradas" });

@@ -1,11 +1,11 @@
 "use strict";
-const conexion = require('../database/bd.js');
+
 const { getAllClientes, updateCliente } = require('../model/cliente_model.js');
 
 exports.getAll = (async (req, res) => {
     try {
 
-        let response = await getAllClientes(conexion, res);
+        let response = await getAllClientes(res);
         if (response != null)
             return res.status(200).json({ response });
         return res.status(404).json({ error: "No hay ventas registradas" });
@@ -22,7 +22,7 @@ exports.update = (async (req, res) => {
     const telefono = req.body.telefono;
     try {
 
-        let response = await updateCliente(direccion, email, telefono, id, conexion, res)
+        let response = await updateCliente(direccion, email, telefono, id, res)
         if (response != null)
             return res.status(200).json(`Cliente actualizado con éxito`);
         else

@@ -1,5 +1,4 @@
 "use strict";
-const conexion = require('../database/bd.js');
 // const fs = require('fs');
 // const path = require('path');
 const { addHilado,
@@ -25,7 +24,7 @@ exports.add = ((req, res) => {
             // ruta_archivo: req.file.path,
             // descripcion: req.body.descripcion
         }
-        addHilado(HILADO, conexion, res)
+        addHilado(HILADO, res)
     } catch (error) {
         return res.status(500).json({ error: "Error de servidor" });
     }
@@ -34,7 +33,7 @@ exports.add = ((req, res) => {
 exports.getAll = (async (req, res) => {
     try {
 
-        let response = await getAllHilado(conexion, res);
+        let response = await getAllHilado(res);
         if (response != null)
             return res.status(200).json({ response });
         return res.status(404).json({ error: "No hay productos en la base de datos" });
@@ -46,7 +45,7 @@ exports.getAll = (async (req, res) => {
 exports.getHiladoByName = (async (req, res) => {
     try {
 
-        let response = await getHiladoByName(conexion, res);
+        let response = await getHiladoByName(res);
         if (response != null)
             return res.status(200).json({ response });
         return res.status(404).json({ error: "No hay productos en la base de datos" });
@@ -64,13 +63,13 @@ exports.transferStockBetweenLocations = (async (req, res) => {
         if (cantidad_tranferida <= 0)
             return res.status(404).json({ error: "Verifique el valor ingresado" });
 
-        let total = await getCantidadStockCiudad(id, origen, conexion, res);
+        let total = await getCantidadStockCiudad(id, origen, res);
         let stockDisponible = total[0].stock
         if (stockDisponible == 0)
             return res.status(404).json({ error: "No dispone de stock" });
 
         if (stockDisponible >= cantidad_tranferida)
-            transferStockBetweenLocations(id, cantidad_tranferida, origen, destino, conexion, res);
+            transferStockBetweenLocations(id, cantidad_tranferida, origen, destino, res);
         else
             return res.status(404).json({ error: "No dispone esa cantidad" });
 
@@ -88,7 +87,7 @@ exports.modificarPrecio = (async (req, res) => {
         if (monto <= 0)
             return res.status(404).json({ error: "Verifique el valor ingresado" });
 
-        let resultado = await modificarPrecio(id, monto, tipoConsumidor, conexion, res);
+        let resultado = await modificarPrecio(id, monto, tipoConsumidor, res);
 
         if (resultado.affectedRows > 0)
             return res.status(201).json("Valor modificado exitosamente");
@@ -110,7 +109,7 @@ exports.incrementarMercaderia = (async (req, res) => {
         if (total <= 0)
             return res.status(404).json({ error: "Verifique el valor ingresado" });
 
-        let resultado = await incrementarMercaderia(id, total, stock, conexion, res);
+        let resultado = await incrementarMercaderia(id, total, stock, res);
 
         if (resultado.affectedRows > 0)
             return res.status(201).json("Stock modificado exitosamente");

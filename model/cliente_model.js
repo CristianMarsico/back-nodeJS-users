@@ -1,5 +1,7 @@
 "use strict";
-exports.getAllClientes = (conexion, res) => {
+const { conexion } = require('../database/bd2.js');
+
+exports.getAllClientes = (res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM cliente ORDER BY nombre ASC';
         conexion.query(sql, (err, resultados) => {
@@ -15,7 +17,7 @@ exports.getAllClientes = (conexion, res) => {
 };
 
 
-exports.updateCliente = ((direccion, email, telefono, id, conexion, res) => {
+exports.updateCliente = ((direccion, email, telefono, id, res) => {
     return new Promise((resolve, reject) => {
         let sql = 'UPDATE cliente SET direccion=?, email=? ,telefono=? WHERE id_cliente=?';
         conexion.query(sql, [direccion, email, telefono, id], (err, resultados) => {

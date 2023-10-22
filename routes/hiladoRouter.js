@@ -11,26 +11,6 @@ const hilado = require('../controller/hilado_controller');
 const { requiereToken } = require('../middlewares/requiereToken.js');
 const { existsHilado } = require('../middlewares/existsHilado.js');
 
-
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, 'uploads'); // Carpeta donde se guardarán las imágenes
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, Date.now() + '-' + file.originalname);
-//     }
-// });
-
-// const upload = multer({ storage });
-
-
-
-// const upload = multer({
-//     storage: storage
-// });
-
-
-
 //ENDPOINTS
 // router.post('/hilado', upload.single('imagen'), hilado.add);
 router.get('/hilado', requiereToken, hilado.getAll);

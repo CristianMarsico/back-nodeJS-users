@@ -4,15 +4,31 @@ const express = require('express');
 const cookie = require('cookie-parser');
 const dontev = require('dotenv');
 const cors = require('cors');
-// const fs = require('fs');
+
 const path = require('path');
 //SETEAMOS VARIABLES DE ENTORNO
 dontev.config({
     path: './env/.env'
 })
 
-require('./scripts/tables.js');
-// require('./reporte/reporte.js');
+const { createTablesAndTriggers } = require('./Scripts/createTablesAndTriggers.js');
+const { createDatabaseIfNotExists, connectToDatabase, performDatabaseBackup } = require('./database/bd2.js');
+const { existsRoleInDataBase } = require('./Scripts/roles.js');
+const { crearUsuarioPorDefecto } = require('./Scripts/users.js');
+
+(async () => {
+    try {
+        await createDatabaseIfNotExists();
+        await connectToDatabase();
+        await createTablesAndTriggers();
+        await existsRoleInDataBase();
+        await crearUsuarioPorDefecto();
+        await performDatabaseBackup();
+    } catch (error) {
+        console.error('Error en la creación de tablas y triggers:', error);
+    }
+})();
+
 const app = express();
 
 //HACEMOS USO DE LAS COOKIES
@@ -55,7 +71,8 @@ app.use('/api', require('./routes/compraRouter.js'));
 app.use('/api', require('./routes/ventaRouter.js'));
 app.use('/api', require('./routes/hiladoRouter.js'));
 app.use('/api', require('./routes/clienteRouter.js'));
-// app.use('/api', require('./routes/ImagenRouter.js'));
+app.use('/api', require('./routes/enProduccion.js'));
+
 
 app.listen(3000, () => {
     console.log("👍👍👍 Escuchando en el puerto 3000");

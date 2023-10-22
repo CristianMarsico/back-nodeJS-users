@@ -1,6 +1,7 @@
 "use strict";
+const { conexion } = require('../database/bd2.js');
 
-exports.getMPByName = (conexion, res) => {
+exports.getMPByName = (res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT nombre FROM materia_prima';
         conexion.query(sql, (err, resultados) => {
@@ -15,7 +16,7 @@ exports.getMPByName = (conexion, res) => {
     });
 };
 
-exports.getAllMP = (conexion, res) => {
+exports.getAllMP = (res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM materia_prima ORDER BY nombre ASC';
         conexion.query(sql, (err, resultados) => {
@@ -31,13 +32,13 @@ exports.getAllMP = (conexion, res) => {
 };
 
 
-exports.updateStock = (id, cantidad, nombre, fecha, conexion, res) => {
+exports.updateStock = (id, cantidad, nombre, fecha, res) => {
 
     try {
         const updateOrigenQuery = `UPDATE materia_prima SET stock = stock - ? WHERE id = ?`;
         conexion.query(updateOrigenQuery, [cantidad, id]);
 
-        let datos = insertTablita(cantidad, nombre, fecha, conexion);
+        let datos = insertTablita(cantidad, nombre, fecha);
         if (datos != null) {
             conexion.commit();
             return res.status(201).json('Stock actualizado correctamente.');
@@ -48,7 +49,7 @@ exports.updateStock = (id, cantidad, nombre, fecha, conexion, res) => {
     }
 };
 
-function insertTablita(cantidad, nombre, fecha, conexion) {
+function insertTablita(cantidad, nombre, fecha) {
     return new Promise((resolve, reject) => {
         let sql = 'INSERT INTO enproduccion (nombre, stock, fecha) VALUES (?, ?, ?)';
         conexion.query(sql, [nombre, cantidad, fecha], (err, resultados) => {
@@ -66,7 +67,7 @@ function insertTablita(cantidad, nombre, fecha, conexion) {
 }
 
 //Retorna el resultados con las compras realizadas en una fecha dada.
-exports.getProduccionFecha = ((min, max, conexion, res) => {
+exports.getProduccionFecha = ((min, max, res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT COUNT(nombre) as total, nombre, stock, fecha FROM enproduccion WHERE fecha BETWEEN ? AND ? GROUP BY nombre, fecha, stock ORDER BY fecha';
         conexion.query(sql, [min, max], (err, resultados) => {
@@ -84,7 +85,7 @@ exports.getProduccionFecha = ((min, max, conexion, res) => {
 });
 
 
-exports.getStockMP = (id, conexion, res) => {
+exports.getStockMP = (id, res) => {
     return new Promise((resolve, reject) => {
 
         const sql = `SELECT stock FROM materia_prima WHERE id = ?`;
@@ -100,7 +101,7 @@ exports.getStockMP = (id, conexion, res) => {
     });
 };
 
-exports.deleteMP = ((id, conexion, res) => {
+exports.deleteMP = ((id, res) => {
     return new Promise((resolve, reject) => {
         let sql = 'DELETE FROM materia_prima WHERE id = ?';
         conexion.query(sql, [id], (err, resultados) => {
@@ -118,7 +119,7 @@ exports.deleteMP = ((id, conexion, res) => {
 });
 
 
-exports.updateMP = ((nombre, precio, stock, id, conexion, res) => {
+exports.updateMP = ((nombre, precio, stock, id, res) => {
     return new Promise((resolve, reject) => {
         let sql = 'UPDATE materia_prima SET nombre=?, precio=? ,stock=? WHERE id=?';
         conexion.query(sql, [nombre, precio, stock, id], (err, resultados) => {

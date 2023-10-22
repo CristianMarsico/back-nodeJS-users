@@ -1,5 +1,5 @@
 "use strict";
-const conexion = require('../database/bd.js');
+
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const { WritableStream, ReadableStream } = require('memory-streams');
@@ -9,7 +9,7 @@ exports.reporteVenta = (async (req, res) => {
     const { fechaMin } = req.params;
     const { fechaMax } = req.params;
     try {
-        let respuesta = await getVentaFecha(fechaMin, fechaMax, conexion, res);
+        let respuesta = await getVentaFecha(fechaMin, fechaMax, res);
         const outputPath = 'reporteVenta.pdf';
         const doc = new PDFDocument();
         const stream = fs.createWriteStream(outputPath);

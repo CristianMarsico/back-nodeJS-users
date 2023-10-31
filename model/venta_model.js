@@ -1,6 +1,11 @@
 "use strict";
 const { conexion } = require('../database/bd2.js');
 
+/**
+ * Agrega una venta a la base de datos.
+ * @param {object} VENTA - Los datos de la venta a agregar.
+ * @param {object} res - El objeto de respuesta HTTP.
+ */
 exports.addVenta = ((VENTA, res) => {
     conexion.query('INSERT INTO venta SET ?', VENTA, (err, result) => {
         try {
@@ -13,7 +18,14 @@ exports.addVenta = ((VENTA, res) => {
     });
 });
 
-//Retorna el resultados con las compras realizadas en una fecha dada.
+
+/**
+ * Obtiene las ventas realizadas en un rango de fechas.
+ * @param {string} min - La fecha mínima del rango.
+ * @param {string} max - La fecha máxima del rango.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en los datos de las ventas o nulo si no se encontraron.
+ */
 exports.getVentaFecha = ((min, max, res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT COUNT(nombre_prod) as total, nombre_prod, color,SUM(cantidad_vendida) as cantidad, SUM(precio) AS precio, cliente, fecha, tipo_venta FROM venta WHERE fecha BETWEEN ? AND ? GROUP BY nombre_prod, color, cliente, tipo_venta, fecha ORDER BY fecha';
@@ -31,6 +43,11 @@ exports.getVentaFecha = ((min, max, res) => {
     });
 });
 
+/**
+ * Obtiene todas las ventas ordenadas por ID descendente.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en los datos de las ventas o nulo si no se encontraron.
+ */
 exports.getAllVentas = (res) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM venta ORDER BY id DESC';

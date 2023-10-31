@@ -1,3 +1,11 @@
+"use strict"
+
+/**
+ * Agrega un rol de usuario a la base de datos.
+ * @param {object} ROL - Los datos del rol a agregar.
+ * @param {object} conexion - La conexión a la base de datos.
+ * @param {object} res - El objeto de respuesta HTTP.
+ */
 exports.addRol = (ROL, conexion, res) => {
     conexion.query('INSERT INTO usuario_role SET ?', ROL, (error) => {
         try {
@@ -5,15 +13,20 @@ exports.addRol = (ROL, conexion, res) => {
                 console.error('Error al insertar el rol del usuario: ', error);
                 return;
             }
-            // res.status(201).json('Registro de rol creado exitosamente');
             return;
         } catch (error) {
             res.status(500).json('Error de conexion');
         }
     });
-
 };
 
+/**
+ * Verifica la existencia de un rol en la base de datos por su tipo.
+ * @param {string} rol - El tipo de rol a verificar.
+ * @param {object} conexion - La conexión a la base de datos.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en el ID del rol o nulo si no se encontró.
+ */
 exports.verificarExistenciaRol = (rol, conexion, res) => {
     return new Promise((resolve, reject) => {
         const query = 'SELECT * FROM role WHERE tipo = ?';
@@ -32,5 +45,4 @@ exports.verificarExistenciaRol = (rol, conexion, res) => {
             }
         });
     });
-
 };

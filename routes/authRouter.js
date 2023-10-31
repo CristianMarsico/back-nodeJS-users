@@ -1,5 +1,4 @@
 "use strict";
-
 const express = require('express')
 const router = express.Router()
 const { body } = require('express-validator')
@@ -10,10 +9,9 @@ const authController = require('../controller/authController.js')
 //HACEMOS USO DE LOS MIDDLEWARES
 const { validatorReqExpress } = require('../middlewares/validatorRequest.js')
 const { existsUserInBD } = require('../middlewares/existUserInDB.js');
-const { requiereToken } = require('../middlewares/requiereToken.js');
 const { requireRefreshToken } = require('../middlewares/requiereRefreshToken.js');
 
-//ENDPOINTS
+// Ruta para registrar un nuevo usuario
 router.post('/register',
     [
         body("nombre", "faltan ingresar datos").trim().isLength({ min: 1 }),
@@ -35,7 +33,7 @@ router.post('/register',
     existsUserInBD,
     authController.register);
 
-
+// Ruta para iniciar sesión de usuario
 router.post('/login',
     [
         body("usuario", "minimo 4 letras").trim().isLength({ min: 4 }),
@@ -47,17 +45,22 @@ router.post('/login',
     authController.login)
 
 
-
+// Ruta para eliminar un usuario por su ID
 router.delete('/deleteUser/:id', existsUserInBD, authController.deleteUser)
+
+// Ruta para actualizar los datos de un usuario por su ID
 router.put('/updateUser/:id', authController.updateUser)
+
+// Ruta para obtener todos los usuarios
 router.get('/getAll', authController.getAllUser)
 
-
-
+// Ruta para obtener un usuario por su ID
 router.get('/getUserById/:id', authController.getUserByID)
 
+// Ruta para renovar el token de autenticación
 router.get('/refreshToken', requireRefreshToken, authController.refreshToken)
 
+// Ruta para cerrar sesión de usuario
 router.get('/logout', authController.logout)
 
 

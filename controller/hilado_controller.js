@@ -1,6 +1,4 @@
 "use strict";
-// const fs = require('fs');
-// const path = require('path');
 const { addHilado,
     getAllHilado,
     getHiladoByName,
@@ -9,20 +7,20 @@ const { addHilado,
     modificarPrecio,
     incrementarMercaderia } = require('../model/hilado_model.js');
 
+/**
+* Agrega un nuevo hilado a la base de datos.
+* @param {object} HILADO - Los detalles del hilado a agregar.
+* @param {object} res - El objeto de respuesta HTTP.
+*/
 exports.add = ((req, res) => {
-
     try {
-
         const HILADO = {
             producto_terminado: req.body.producto_terminado.toLowerCase(),
             color: req.body.color.toLowerCase(),
             stock_loberia: req.body.stock_loberia,
             stock_buenosAires: req.body.stock_buenosAires,
             precio_venta_mayorista: req.body.precio_venta_mayorista,
-            precio_venta_minorista: req.body.precio_venta_minorista,
-            // nombre: req.file.originalname,
-            // ruta_archivo: req.file.path,
-            // descripcion: req.body.descripcion
+            precio_venta_minorista: req.body.precio_venta_minorista
         }
         addHilado(HILADO, res)
     } catch (error) {
@@ -30,6 +28,11 @@ exports.add = ((req, res) => {
     }
 });
 
+/**
+ * Obtiene todos los hilados registrados en la base de datos.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en una matriz de hilados o nulo si no se encuentran registros.
+ */
 exports.getAll = (async (req, res) => {
     try {
 
@@ -42,6 +45,11 @@ exports.getAll = (async (req, res) => {
     }
 });
 
+/**
+ * Obtiene un hilado por su nombre.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en el hilado con el nombre especificado o nulo si no se encuentra el registro.
+ */
 exports.getHiladoByName = (async (req, res) => {
     try {
 
@@ -54,6 +62,14 @@ exports.getHiladoByName = (async (req, res) => {
     }
 });
 
+/**
+ * Transfiere stock entre dos ubicaciones de un hilado específico.
+ * @param {number} id - ID del hilado.
+ * @param {number} cantidad_tranferida - Cantidad a transferir.
+ * @param {string} origen - Ubicación de origen.
+ * @param {string} destino - Ubicación de destino.
+ * @param {object} res - El objeto de respuesta HTTP.
+ */
 exports.transferStockBetweenLocations = (async (req, res) => {
     try {
         const { id } = req.params;
@@ -78,6 +94,14 @@ exports.transferStockBetweenLocations = (async (req, res) => {
     }
 });
 
+/**
+ * Modifica el precio de un hilado para un tipo de consumidor específico.
+ * @param {number} id - ID del hilado.
+ * @param {number} monto - Nuevo precio.
+ * @param {string} tipo_consumidor - Tipo de consumidor para el que se modifica el precio.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en los resultados de la modificación o nulo si no se encontró el registro.
+ */
 exports.modificarPrecio = (async (req, res) => {
     try {
         const { id } = req.params;
@@ -99,7 +123,14 @@ exports.modificarPrecio = (async (req, res) => {
     }
 });
 
-
+/**
+ * Incrementa la mercadería de un hilado en una ubicación específica.
+ * @param {number} id - ID del hilado.
+ * @param {number} stock - Cantidad a incrementar.
+ * @param {number} total - Nuevo total de stock.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en los resultados de la modificación o nulo si no se encontró el registro.
+ */
 exports.incrementarMercaderia = (async (req, res) => {
     try {
         const { id } = req.params;
@@ -120,7 +151,3 @@ exports.incrementarMercaderia = (async (req, res) => {
         return res.status(500).json({ error: "Error de servidor" });
     }
 });
-
-
-
-

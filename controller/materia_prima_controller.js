@@ -1,5 +1,4 @@
 "use strict";
-
 const {
     updateStock,
     getMPByName,
@@ -8,6 +7,11 @@ const {
     deleteMP,
     updateMP } = require('../model/materiaPrima_model.js');
 
+/**
+* Obtiene una materia prima por su nombre.
+* @param {object} res - El objeto de respuesta HTTP.
+* @returns {Promise} Una promesa que resuelve en la materia prima con el nombre especificado o nulo si no se encuentra el registro.
+*/
 exports.getMPByName = (async (req, res) => {
     try {
         let response = await getMPByName(res);
@@ -20,6 +24,11 @@ exports.getMPByName = (async (req, res) => {
     }
 });
 
+/**
+ * Obtiene todas las materias primas registradas en la base de datos.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en una matriz de materias primas o nulo si no se encuentran registros.
+ */
 exports.getAllMP = (async (req, res) => {
     try {
         let response = await getAllMP(res);
@@ -32,7 +41,14 @@ exports.getAllMP = (async (req, res) => {
     }
 });
 
-
+/**
+ * Actualiza el stock de una materia prima.
+ * @param {number} id - ID de la materia prima.
+ * @param {number} cantidad - Cantidad a agregar o restar.
+ * @param {string} nombre - Nombre de la materia prima.
+ * @param {string} fecha - Fecha de la operación.
+ * @param {object} res - El objeto de respuesta HTTP.
+ */
 exports.updateStock = (async (req, res) => {
     try {
         const { id } = req.params;
@@ -63,7 +79,12 @@ exports.updateStock = (async (req, res) => {
     }
 });
 
-
+/**
+ * Elimina una materia prima por su ID.
+ * @param {number} id - ID de la materia prima.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en los resultados de la eliminación o nulo si no se encontró el registro.
+ */
 exports.deleteMP = (async (req, res) => {
 
     const { id } = req.params;
@@ -78,6 +99,15 @@ exports.deleteMP = (async (req, res) => {
     }
 })
 
+/**
+ * Actualiza los datos de una materia prima por su ID.
+ * @param {string} nombre - Nombre de la materia prima.
+ * @param {number} precio - Precio de la materia prima.
+ * @param {number} stock - Stock de la materia prima.
+ * @param {number} id - ID de la materia prima a actualizar.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en los resultados de la actualización o nulo si no se encontró el registro.
+ */
 exports.updateMP = (async (req, res) => {
 
     const { id } = req.params;

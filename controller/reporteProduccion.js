@@ -1,10 +1,14 @@
 "use strict";
-
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const { WritableStream, ReadableStream } = require('memory-streams');
 const { getProduccionFecha } = require('../model/materiaPrima_model.js');
 
+/**
+ * Genera un informe de materia prima en producción en un rango de fechas y lo devuelve como un archivo PDF.
+ * @param {object} req - El objeto de solicitud HTTP que debe contener las fechas mínima (fechaMin) y máxima (fechaMax) del rango.
+ * @param {object} res - El objeto de respuesta HTTP que recibirá el informe como un archivo PDF adjunto.
+ */
 exports.reporteProduccion = (async (req, res) => {
     const { fechaMin } = req.params;
     const { fechaMax } = req.params;
@@ -44,8 +48,6 @@ exports.reporteProduccion = (async (req, res) => {
             });
 
         });
-
-
     } catch (error) {
         res.status(500).json({ error: 'Error de servidor' });
     }

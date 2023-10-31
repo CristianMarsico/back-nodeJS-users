@@ -1,16 +1,28 @@
+/**
+ * Módulo para interactuar con la base de datos MySQL y realizar copias de seguridad.
+ * @module database
+ */
 const mysql = require('mysql');
 const mysqldump = require('mysqldump');
 const fs = require('fs');
 
-
+// Configuración de la base de datos obtenida desde las variables de entorno
 const dbConfig = {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS
 };
 
+// Crear una conexión a la base de datos
 const conexion = mysql.createConnection(dbConfig);
 
+
+/**
+ * Realiza una consulta a la base de datos de manera asíncrona.
+ * @param {string} sql - Consulta SQL a ejecutar.
+ * @param {Array} values - Valores de los parámetros en la consulta (opcional).
+ * @returns {Promise<Array>} Promesa resuelta con los resultados de la consulta.
+ */
 async function queryAsync(sql, values = []) {
     return new Promise((resolve, reject) => {
         conexion.query(sql, values, (error, results) => {
@@ -24,6 +36,10 @@ async function queryAsync(sql, values = []) {
     });
 }
 
+/**
+ * Intenta crear la base de datos si no existe.
+ * @returns {Promise} Promesa resuelta una vez que se intenta crear la base de datos.
+ */
 async function createDatabaseIfNotExists() {
     return new Promise((resolve, reject) => {
         const databaseName = process.env.DB_DATABASE;
@@ -40,6 +56,11 @@ async function createDatabaseIfNotExists() {
         });
     });
 }
+
+/**
+ * Conecta a la base de datos configurada.
+ * @returns {Promise} Promesa resuelta una vez que se ha establecido la conexión.
+ */
 async function connectToDatabase() {
     return new Promise((resolve, reject) => {
         // Conecta a la base de datos "hilados"
@@ -55,6 +76,11 @@ async function connectToDatabase() {
     });
 }
 
+
+/**
+ * Realiza una copia de seguridad de la base de datos en un archivo SQL.
+ * @returns {Promise} Promesa resuelta una vez que se ha completado la copia de seguridad.
+ */
 async function performDatabaseBackup() {
     const backupFileName = 'hilados.sql';
 

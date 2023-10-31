@@ -1,4 +1,14 @@
 "use strict";
+
+/**
+ * Obtiene un usuario por nombre, usuario y tipo de rol.
+ * @param {string} name - El nombre del usuario.
+ * @param {string} user - El nombre de usuario.
+ * @param {string} tipo_rol - El tipo de rol del usuario.
+ * @param {object} conexion - La conexión a la base de datos.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en los datos del usuario o nulo si no se encontró.
+ */
 exports.getUserBy_Name_And_User_And_Rol = ((name, user, tipo_rol, conexion, res) => {
     return new Promise((resolve, reject) => {
         let sql = `SELECT u.nombre, u.usuario, r.tipo FROM usuario u, role r, usuario_role ur WHERE u.id = ur.usuario_id AND ur.rol_id = r.id AND u.nombre = ? AND u.usuario = ? AND r.tipo = ?`;
@@ -16,10 +26,16 @@ exports.getUserBy_Name_And_User_And_Rol = ((name, user, tipo_rol, conexion, res)
     });
 });
 
+/**
+ * Obtiene un usuario por nombre y nombre de usuario.
+ * @param {string} name - El nombre del usuario.
+ * @param {string} user - El nombre de usuario.
+ * @param {object} conexion - La conexión a la base de datos.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en los datos del usuario o nulo si no se encontró.
+ */
 exports.getUserByNameAndUserName = ((name, user, conexion, res) => {
     return new Promise((resolve, reject) => {
-        //CURDATE() -> DIA ACTUAL
-        // const consulta = 'SELECT * FROM compra WHERE DAY(CURDATE()) = 17 and MONTH(fecha)= MONTH(CURDATE()) -1';
         let sql = 'SELECT * FROM usuario WHERE nombre = ? AND usuario = ?';
         conexion.query(sql, [name, user], (err, resultados) => {
             try {
@@ -35,7 +51,12 @@ exports.getUserByNameAndUserName = ((name, user, conexion, res) => {
     });
 });
 
-
+/**
+ * Agrega un usuario a la base de datos.
+ * @param {object} USUARIO - Los datos del usuario a agregar.
+ * @param {object} conexion - La conexión a la base de datos.
+ * @param {object} res - El objeto de respuesta HTTP.
+ */
 exports.addUser = (USUARIO, conexion, res) => {
     conexion.query('INSERT INTO usuario SET ?', USUARIO, (err, resultados) => {
         try {
@@ -48,6 +69,13 @@ exports.addUser = (USUARIO, conexion, res) => {
     });
 };
 
+/**
+ * Elimina un usuario por su ID.
+ * @param {number} id - El ID del usuario a eliminar.
+ * @param {object} conexion - La conexión a la base de datos.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en los resultados de la eliminación o nulo si no se encontró.
+ */
 exports.deleteUser = ((id, conexion, res) => {
     return new Promise((resolve, reject) => {
         let sql = 'DELETE FROM usuario WHERE id = ?';
@@ -65,6 +93,14 @@ exports.deleteUser = ((id, conexion, res) => {
     });
 });
 
+/**
+ * Actualiza el nombre de usuario de un usuario por su ID.
+ * @param {number} id - El ID del usuario a actualizar.
+ * @param {string} nombre - El nuevo nombre de usuario.
+ * @param {object} conexion - La conexión a la base de datos.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en los resultados de la actualización o nulo si no se encontró.
+ */
 exports.updateUser = ((id, nombre, conexion, res) => {
     return new Promise((resolve, reject) => {
         let sql = 'UPDATE usuario SET usuario= ? WHERE id = ?';

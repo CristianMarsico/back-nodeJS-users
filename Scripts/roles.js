@@ -1,5 +1,12 @@
 const { queryAsync } = require('../database/bd2.js');
 
+
+/**
+ * Verifica la existencia de roles en la base de datos y, si no existen, los inserta.
+ * @async
+ * @function existsRoleInDataBase
+ * @throws {Error} Lanza un error si ocurre un problema durante la verificación o inserción de roles.
+ */
 async function existsRoleInDataBase() {
     try {
         const count = await checkRoleCount();
@@ -13,12 +20,27 @@ async function existsRoleInDataBase() {
     }
 }
 
+
+/**
+ * Obtiene el número de roles en la tabla 'role' de la base de datos.
+ * @async
+ * @function checkRoleCount
+ * @returns {number} El número de roles en la tabla 'role'.
+ * @throws {Error} Lanza un error si ocurre un problema durante la consulta.
+ */
 async function checkRoleCount() {
     const query = 'SELECT COUNT(*) AS count FROM role';
     const results = await queryAsync(query);
     return results[0].count;
 }
 
+
+/**
+ * Inserta roles predeterminados en la base de datos.
+ * @async
+ * @function insertDefaultRoles
+ * @throws {Error} Lanza un error si ocurre un problema durante la inserción de roles.
+ */
 async function insertDefaultRoles() {
     const roles = [
         { tipo: 'super_admin' },

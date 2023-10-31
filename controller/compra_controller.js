@@ -2,6 +2,13 @@
 
 const { addCompra, getAllCompras } = require('../model/compra_model.js');
 
+/**
+ * Registra una compra en la base de datos.
+ * @param {object} req - El objeto de solicitud HTTP que contiene los datos de la compra.
+ * @param {object} res - El objeto de respuesta HTTP.
+ *
+ * Registra una compra en la base de datos con los detalles proporcionados, incluyendo el producto, cantidad, precio unitario y fecha de la compra. Responde con un mensaje de éxito si la compra se registra correctamente o un mensaje de error si hay problemas con los datos o la fecha de la compra.
+ */
 exports.compra = ((req, res) => {
     try {
         const COMPRA = {
@@ -28,6 +35,13 @@ exports.compra = ((req, res) => {
     }
 });
 
+/**
+ * Obtiene todas las compras registradas en la base de datos.
+ * @param {object} req - El objeto de solicitud HTTP.
+ * @param {object} res - El objeto de respuesta HTTP.
+ *
+ * Obtiene todas las compras registradas en la base de datos y responde con una lista de compras si se encuentran registros. En caso contrario, responde con un mensaje de error.
+ */
 exports.getAll = (async (req, res) => {
     try {
 

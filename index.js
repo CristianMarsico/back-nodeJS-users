@@ -34,22 +34,42 @@ const app = express();
 //HACEMOS USO DE LAS COOKIES
 app.use(cookie())
 
+//LO COMENTADO ES UNA FORMA PARA QUE SOLO ACEPTE CIERTAS URLS
 //HACEMOS USO DE LAS RUTAS PERMITIDAS DE LAS PROPIEDADES 
-const whiteList = [process.env.ORIGIN1, process.env.ORIGIN2, process.env.ORIGIN3]
+// const whiteList = [process.env.ORIGIN1, process.env.ORIGIN2, process.env.ORIGIN3]
 
-//HACEMOS USO DE LOS CORS
-app.use(cors(
-    {
-        origin: function (origin, callback) {
-            // console.log("🤞🤞🤞 => ", origin);
-            if (!origin || whiteList.includes(origin)) {
-                return callback(null, origin);
-            }
-            return callback("Error de CORS origin: " + origin + " No autorizado")
-        }, credentials: true
-    }
-)
-)
+// HACEMOS USO DE LOS CORS
+// app.use(cors(
+//     {
+//         origin: function (origin, callback) {
+//             // console.log("🤞🤞🤞 => ", origin);
+//             if (!origin || whiteList.includes(origin)) {
+//                 return callback(null, origin);
+//             }
+//             return callback("Error de CORS origin: " + origin + " No autorizado")
+//         }, credentials: true
+//     }
+// )
+// )
+
+const allowAnyLocalhost = process.env.ALLOW_ANY_LOCALHOST === 'true';
+
+app.use(cors({
+    origin: allowAnyLocalhost ? /^http:\/\/localhost(:\d+)?$/ : function (origin, callback) {
+        if (!origin) {
+            return callback(null, 'http://localhost');
+        }
+
+        // Agrega lógica adicional aquí si es necesario
+
+        return callback("Error de CORS origin: " + origin + " No autorizado");
+    },
+    credentials: true,
+    exposedHeaders: allowAnyLocalhost ? null : ['Content-Length', 'Authorization'], // Ajusta según tus necesidades
+}));
+
+app.options('*', cors());
+
 
 //VAMOS A TRABAJAR CON JSON
 app.use(express.json())
@@ -74,6 +94,7 @@ app.use('/api', require('./routes/clienteRouter.js'));
 app.use('/api', require('./routes/enProduccion.js'));
 
 
-app.listen(3000, () => {
-    console.log("👍👍👍 Escuchando en el puerto 3000");
-})
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
+});

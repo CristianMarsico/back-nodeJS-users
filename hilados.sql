@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `compra` (
   `total` decimal(10, 2) NOT NULL,
   `fecha` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: enproduccion
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `enproduccion` (
   `stock` int(11) NOT NULL,
   `fecha` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: hilado
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `materia_prima` (
   `precio` decimal(10, 2) NOT NULL,
   `stock` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: role
@@ -222,6 +222,35 @@ INSERT INTO
   )
 VALUES
   (5, 'vino', 12, 600.00, 7200.00, '2023-10-19');
+INSERT INTO
+  `compra` (
+    `id`,
+    `producto`,
+    `cantidad`,
+    `precio_unitario`,
+    `total`,
+    `fecha`
+  )
+VALUES
+  (6, 'fernet dia 1', 5, 6900.00, 34500.00, '2023-11-29');
+INSERT INTO
+  `compra` (
+    `id`,
+    `producto`,
+    `cantidad`,
+    `precio_unitario`,
+    `total`,
+    `fecha`
+  )
+VALUES
+  (
+    7,
+    'fernet dia 3',
+    20,
+    3000.00,
+    60000.00,
+    '2023-11-28'
+  );
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: enproduccion
@@ -231,6 +260,14 @@ INSERT INTO
   `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
 VALUES
   (1, 'fernet dia 1', 5, '2023-10-22');
+INSERT INTO
+  `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
+VALUES
+  (2, 'fernet dia 1', 5, '2023-10-31');
+INSERT INTO
+  `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
+VALUES
+  (3, 'fernet dia 3', 5, '2023-11-29');
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: hilado
@@ -268,11 +305,11 @@ VALUES
 INSERT INTO
   `materia_prima` (`id`, `nombre`, `precio`, `stock`)
 VALUES
-  (1, 'fernet dia 1', 7000.00, 15);
+  (1, 'fernet dia 1', 6900.00, 15);
 INSERT INTO
   `materia_prima` (`id`, `nombre`, `precio`, `stock`)
 VALUES
-  (3, 'vino', 600.00, 12);
+  (4, 'fernet dia 3', 3000.00, 15);
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: role

@@ -4,6 +4,8 @@ const { conexion } = require('../database/bd2.js');
 const { addRol, verificarExistenciaRol } = require('../model/rol_model.js');
 const { getUserByNameAndUserName, addUser, deleteUser, updateUser } = require('../model/userModel.js');
 const { generateToken, generateRefreshToken } = require('../utils/tokenManager.js');
+const { performDatabaseBackup } = require('../database/bd2.js');
+
 
 
 /**
@@ -212,7 +214,8 @@ exports.refreshToken = (req, res) => {
  *
  * Cierra la sesión de usuario y elimina el token de refresco, lo que requiere al usuario volver a autenticarse. Responde con un mensaje de éxito.
  */
-exports.logout = (req, res) => {
+exports.logout = async (req, res) => {
+    await performDatabaseBackup();
     res.clearCookie('refreshToken');
     res.json({ logout: true })
 }

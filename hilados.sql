@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `compra` (
   `total` decimal(10, 2) NOT NULL,
   `fecha` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: enproduccion
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `enproduccion` (
   `stock` int(11) NOT NULL,
   `fecha` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: hilado
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `materia_prima` (
   `precio` decimal(10, 2) NOT NULL,
   `stock` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: role
@@ -251,6 +251,57 @@ VALUES
     60000.00,
     '2023-11-28'
   );
+INSERT INTO
+  `compra` (
+    `id`,
+    `producto`,
+    `cantidad`,
+    `precio_unitario`,
+    `total`,
+    `fecha`
+  )
+VALUES
+  (8, 'dia backup', 12, 2.00, 24.00, '2023-12-20');
+INSERT INTO
+  `compra` (
+    `id`,
+    `producto`,
+    `cantidad`,
+    `precio_unitario`,
+    `total`,
+    `fecha`
+  )
+VALUES
+  (9, 'back up 2', 2, 2.00, 4.00, '2023-12-16');
+INSERT INTO
+  `compra` (
+    `id`,
+    `producto`,
+    `cantidad`,
+    `precio_unitario`,
+    `total`,
+    `fecha`
+  )
+VALUES
+  (
+    10,
+    'cerrar sesionmmmmmmmmmmmmmmmmmmmm',
+    8,
+    2.00,
+    16.00,
+    '2023-12-20'
+  );
+INSERT INTO
+  `compra` (
+    `id`,
+    `producto`,
+    `cantidad`,
+    `precio_unitario`,
+    `total`,
+    `fecha`
+  )
+VALUES
+  (11, 'backu´´p ', 4, 10.00, 40.00, '2023-12-20');
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: enproduccion
@@ -268,6 +319,15 @@ INSERT INTO
   `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
 VALUES
   (3, 'fernet dia 3', 5, '2023-11-29');
+INSERT INTO
+  `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
+VALUES
+  (
+    4,
+    'cerrar sesionmmmmmmmmmmmmmmmmmmmm',
+    8,
+    '2023-12-14'
+  );
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: hilado
@@ -310,6 +370,18 @@ INSERT INTO
   `materia_prima` (`id`, `nombre`, `precio`, `stock`)
 VALUES
   (4, 'fernet dia 3', 3000.00, 15);
+INSERT INTO
+  `materia_prima` (`id`, `nombre`, `precio`, `stock`)
+VALUES
+  (5, 'dia backup', 2.00, 12);
+INSERT INTO
+  `materia_prima` (`id`, `nombre`, `precio`, `stock`)
+VALUES
+  (6, 'back up 2', 2.00, 2);
+INSERT INTO
+  `materia_prima` (`id`, `nombre`, `precio`, `stock`)
+VALUES
+  (7, 'cerrar sesionmmmmmmmmmmmmmmmmmmmm', 2.00, 0);
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: role

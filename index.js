@@ -23,7 +23,7 @@ const { crearUsuarioPorDefecto } = require('./Scripts/users.js');
         await createTablesAndTriggers();
         await existsRoleInDataBase();
         await crearUsuarioPorDefecto();
-        await performDatabaseBackup();
+        // await performDatabaseBackup();
     } catch (error) {
         console.error('Error en la creación de tablas y triggers:', error);
     }
@@ -92,6 +92,7 @@ app.use('/api', require('./routes/ventaRouter.js'));
 app.use('/api', require('./routes/hiladoRouter.js'));
 app.use('/api', require('./routes/clienteRouter.js'));
 app.use('/api', require('./routes/enProduccion.js'));
+
 
 
 const PORT = process.env.PORT || 3000;

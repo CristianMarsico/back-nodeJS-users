@@ -20,3 +20,27 @@ exports.getAllEnProduccion = (res) => {
         });
     });
 };
+
+
+/**
+ * Elimina una materia prima en produccion por su ID.
+ * @param {number} id - El ID de la materia prima a eliminar.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en el resultado de la eliminación de la materia prima.
+ */
+exports.deleteEnProduccion = ((id, res) => {
+    return new Promise((resolve, reject) => {
+        let sql = 'DELETE FROM enproduccion WHERE id = ?';
+        conexion.query(sql, [id], (err, resultados) => {
+            try {
+                if (err)
+                    return res.status(404).json({ error: 'Error al eliminar' });
+                if (resultados.affectedRows > 0)
+                    return resolve(resultados);
+                return resolve(null);
+            } catch (error) {
+                return res.status(500).json({ error: "Error de conexion" });
+            }
+        });
+    });
+});

@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `enproduccion` (
   `stock` int(11) NOT NULL,
   `fecha` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: hilado
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `hilado` (
   `precio_venta_mayorista` decimal(10, 2) NOT NULL,
   `precio_venta_minorista` decimal(10, 2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 3 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: materia_prima
@@ -310,24 +310,20 @@ VALUES
 INSERT INTO
   `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
 VALUES
-  (1, 'fernet dia 1', 5, '2023-10-22');
-INSERT INTO
-  `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
-VALUES
-  (2, 'fernet dia 1', 5, '2023-10-31');
-INSERT INTO
-  `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
-VALUES
-  (3, 'fernet dia 3', 5, '2023-11-29');
-INSERT INTO
-  `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
-VALUES
   (
     4,
     'cerrar sesionmmmmmmmmmmmmmmmmmmmm',
     8,
     '2023-12-14'
   );
+INSERT INTO
+  `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
+VALUES
+  (5, 'dia backup', 1, '2023-12-15');
+INSERT INTO
+  `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
+VALUES
+  (6, 'dia backup', 1, '2023-12-21');
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: hilado
@@ -357,6 +353,38 @@ INSERT INTO
   )
 VALUES
   (2, 'pt2 dia 1', 'gris', 1, 40, 4000.00, 4500.00);
+INSERT INTO
+  `hilado` (
+    `id`,
+    `producto_terminado`,
+    `color`,
+    `stock_loberia`,
+    `stock_buenosAires`,
+    `precio_venta_mayorista`,
+    `precio_venta_minorista`
+  )
+VALUES
+  (3, 'sdadas', 'sdadsa', 3, 4, 344.00, 433.00);
+INSERT INTO
+  `hilado` (
+    `id`,
+    `producto_terminado`,
+    `color`,
+    `stock_loberia`,
+    `stock_buenosAires`,
+    `precio_venta_mayorista`,
+    `precio_venta_minorista`
+  )
+VALUES
+  (
+    4,
+    'fsdfsdfdsfs',
+    'dfsdfsd',
+    43,
+    34,
+    44344.00,
+    3434343.00
+  );
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: materia_prima
@@ -373,7 +401,7 @@ VALUES
 INSERT INTO
   `materia_prima` (`id`, `nombre`, `precio`, `stock`)
 VALUES
-  (5, 'dia backup', 2.00, 12);
+  (5, 'dia backup', 2.00, 10);
 INSERT INTO
   `materia_prima` (`id`, `nombre`, `precio`, `stock`)
 VALUES

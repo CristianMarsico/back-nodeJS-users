@@ -1,5 +1,5 @@
 "use strict";
-const { getAllEnProduccion } = require('../model/enProduccion_model.js');
+const { getAllEnProduccion, deleteEnProduccion } = require('../model/enProduccion_model.js');
 
 /**
  * Obtiene todos los elementos en producción registrados en la base de datos.
@@ -19,3 +19,24 @@ exports.getAll = (async (req, res) => {
         return res.status(500).json({ error: "Error de servidor" });
     }
 });
+
+
+/**
+ * Elimina una materia prima que se encuentra en produccion por su ID.
+ * @param {number} id - ID de la materia prima.
+ * @param {object} res - El objeto de respuesta HTTP.
+ * @returns {Promise} Una promesa que resuelve en los resultados de la eliminación o nulo si no se encontró el registro.
+ */
+exports.deleteEnProduccion = (async (req, res) => {
+
+    const { id } = req.params;
+    try {
+        let response = await deleteEnProduccion(id, res)
+        if (response != null)
+            return res.status(200).json(`Materia prima en prduccion borrado con éxito`);
+        else
+            res.status(404).json({ error: "Error: No se ha podido eliminar" })
+    } catch (error) {
+        return res.status(500).json({ error: "Error de servidor" });
+    }
+})

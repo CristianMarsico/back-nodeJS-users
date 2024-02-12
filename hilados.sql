@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `email` varchar(100) DEFAULT NULL,
   `telefono` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id_cliente`)
-) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: compra
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `enproduccion` (
   `stock` int(11) NOT NULL,
   `fecha` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 7 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: hilado
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `venta` (
   PRIMARY KEY (`id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `venta_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `hilado` (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: cliente
@@ -154,6 +154,38 @@ VALUES
     'las heras 219',
     'cristian@cristian.com',
     ''
+  );
+INSERT INTO
+  `cliente` (
+    `id_cliente`,
+    `nombre`,
+    `direccion`,
+    `email`,
+    `telefono`
+  )
+VALUES
+  (
+    2,
+    'qqqqqqqqqqqqq',
+    'calle arboleda 664',
+    'cristian@cristian.com',
+    '123-543-5757'
+  );
+INSERT INTO
+  `cliente` (
+    `id_cliente`,
+    `nombre`,
+    `direccion`,
+    `email`,
+    `telefono`
+  )
+VALUES
+  (
+    3,
+    'xxxa',
+    'direc nueva',
+    'cristian@cristian.com',
+    '2262570382'
   );
 
 # ------------------------------------------------------------
@@ -310,20 +342,7 @@ VALUES
 INSERT INTO
   `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
 VALUES
-  (
-    4,
-    'cerrar sesionmmmmmmmmmmmmmmmmmmmm',
-    8,
-    '2023-12-14'
-  );
-INSERT INTO
-  `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
-VALUES
-  (5, 'dia backup', 1, '2023-12-15');
-INSERT INTO
-  `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
-VALUES
-  (6, 'dia backup', 1, '2023-12-21');
+  (9, 'back up 2', 70, '2024-02-12');
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: hilado
@@ -340,7 +359,7 @@ INSERT INTO
     `precio_venta_minorista`
   )
 VALUES
-  (1, 'pt dia 1', 'negro', 349, 401, 1000.00, 1500.00);
+  (1, 'pt dia 1', 'negro', 348, 401, 1000.00, 1500.00);
 INSERT INTO
   `hilado` (
     `id`,
@@ -380,8 +399,8 @@ VALUES
     4,
     'fsdfsdfdsfs',
     'dfsdfsd',
-    43,
-    34,
+    7,
+    0,
     44344.00,
     3434343.00
   );
@@ -405,11 +424,7 @@ VALUES
 INSERT INTO
   `materia_prima` (`id`, `nombre`, `precio`, `stock`)
 VALUES
-  (6, 'back up 2', 2.00, 2);
-INSERT INTO
-  `materia_prima` (`id`, `nombre`, `precio`, `stock`)
-VALUES
-  (7, 'cerrar sesionmmmmmmmmmmmmmmmmmmmm', 2.00, 0);
+  (6, 'back up 2', 2.00, 30);
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: role
@@ -489,6 +504,74 @@ VALUES
     'las heras 219',
     'cristian@cristian.com',
     ''
+  );
+INSERT INTO
+  `venta` (
+    `id`,
+    `producto_id`,
+    `nombre_prod`,
+    `color`,
+    `cantidad_vendida`,
+    `precio`,
+    `stock_origen`,
+    `tipo_venta`,
+    `fecha`,
+    `cliente`,
+    `medio_pago`,
+    `direccion`,
+    `email`,
+    `telefono`
+  )
+VALUES
+  (
+    2,
+    4,
+    'fsdfsdfdsfs',
+    'dfsdfsd',
+    70,
+    99999999.99,
+    'stock_loberia',
+    'precio_venta_minorista',
+    '2024-02-12',
+    'qqqqqqqqqqqqq',
+    'mercado pago',
+    'calle arboleda 664',
+    'cristian@cristian.com',
+    '123-543-5757'
+  );
+INSERT INTO
+  `venta` (
+    `id`,
+    `producto_id`,
+    `nombre_prod`,
+    `color`,
+    `cantidad_vendida`,
+    `precio`,
+    `stock_origen`,
+    `tipo_venta`,
+    `fecha`,
+    `cliente`,
+    `medio_pago`,
+    `direccion`,
+    `email`,
+    `telefono`
+  )
+VALUES
+  (
+    3,
+    1,
+    'pt dia 1',
+    'negro',
+    1,
+    1000.00,
+    'stock_loberia',
+    'precio_venta_mayorista',
+    '2024-02-12',
+    'xxxa',
+    'tienda nube',
+    'direc nueva',
+    'cristian@cristian.com',
+    '2262570382'
   );
 
 # ------------------------------------------------------------

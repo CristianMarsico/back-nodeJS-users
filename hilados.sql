@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `email` varchar(100) DEFAULT NULL,
   `telefono` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id_cliente`)
-) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: compra
@@ -26,12 +26,12 @@ CREATE TABLE IF NOT EXISTS `cliente` (
 CREATE TABLE IF NOT EXISTS `compra` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `producto` varchar(50) NOT NULL,
-  `cantidad` int(11) NOT NULL,
+  `cantidad` decimal(10, 3) NOT NULL,
   `precio_unitario` decimal(10, 2) NOT NULL,
   `total` decimal(10, 2) NOT NULL,
   `fecha` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 12 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: enproduccion
@@ -40,10 +40,10 @@ CREATE TABLE IF NOT EXISTS `compra` (
 CREATE TABLE IF NOT EXISTS `enproduccion` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
-  `stock` int(11) NOT NULL,
+  `stock` decimal(10, 3) NOT NULL,
   `fecha` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 10 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: hilado
@@ -53,12 +53,12 @@ CREATE TABLE IF NOT EXISTS `hilado` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `producto_terminado` varchar(150) NOT NULL,
   `color` varchar(50) NOT NULL,
-  `stock_loberia` int(11) NOT NULL,
-  `stock_buenosAires` int(11) NOT NULL,
+  `stock_loberia` decimal(10, 3) NOT NULL,
+  `stock_buenosAires` decimal(10, 3) NOT NULL,
   `precio_venta_mayorista` decimal(10, 2) NOT NULL,
   `precio_venta_minorista` decimal(10, 2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: materia_prima
@@ -68,9 +68,9 @@ CREATE TABLE IF NOT EXISTS `materia_prima` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   `precio` decimal(10, 2) NOT NULL,
-  `stock` int(11) NOT NULL,
+  `stock` decimal(10, 3) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 9 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: role
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `venta` (
   `producto_id` int(11) NOT NULL,
   `nombre_prod` varchar(100) NOT NULL,
   `color` varchar(100) NOT NULL,
-  `cantidad_vendida` int(11) NOT NULL,
+  `cantidad_vendida` decimal(10, 3) NOT NULL,
   `precio` decimal(10, 2) NOT NULL,
   `stock_origen` enum('stock_loberia', 'stock_buenosAires') NOT NULL,
   `tipo_venta` enum(
@@ -133,298 +133,32 @@ CREATE TABLE IF NOT EXISTS `venta` (
   PRIMARY KEY (`id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `venta_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `hilado` (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: cliente
 # ------------------------------------------------------------
 
-INSERT INTO
-  `cliente` (
-    `id_cliente`,
-    `nombre`,
-    `direccion`,
-    `email`,
-    `telefono`
-  )
-VALUES
-  (
-    1,
-    'cliente dia 1',
-    'las heras 219',
-    'cristian@cristian.com',
-    ''
-  );
-INSERT INTO
-  `cliente` (
-    `id_cliente`,
-    `nombre`,
-    `direccion`,
-    `email`,
-    `telefono`
-  )
-VALUES
-  (
-    2,
-    'qqqqqqqqqqqqq',
-    'calle arboleda 664',
-    'cristian@cristian.com',
-    '123-543-5757'
-  );
-INSERT INTO
-  `cliente` (
-    `id_cliente`,
-    `nombre`,
-    `direccion`,
-    `email`,
-    `telefono`
-  )
-VALUES
-  (
-    3,
-    'xxxa',
-    'direc nueva',
-    'cristian@cristian.com',
-    '2262570382'
-  );
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: compra
 # ------------------------------------------------------------
 
-INSERT INTO
-  `compra` (
-    `id`,
-    `producto`,
-    `cantidad`,
-    `precio_unitario`,
-    `total`,
-    `fecha`
-  )
-VALUES
-  (
-    1,
-    'fernet dia 1',
-    10,
-    5000.00,
-    50000.00,
-    '2023-10-21'
-  );
-INSERT INTO
-  `compra` (
-    `id`,
-    `producto`,
-    `cantidad`,
-    `precio_unitario`,
-    `total`,
-    `fecha`
-  )
-VALUES
-  (2, 'fernet dia 1', 5, 9000.00, 45000.00, '2023-10-22');
-INSERT INTO
-  `compra` (
-    `id`,
-    `producto`,
-    `cantidad`,
-    `precio_unitario`,
-    `total`,
-    `fecha`
-  )
-VALUES
-  (3, 'vino dia 1', 60, 900.00, 54000.00, '2023-10-22');
-INSERT INTO
-  `compra` (
-    `id`,
-    `producto`,
-    `cantidad`,
-    `precio_unitario`,
-    `total`,
-    `fecha`
-  )
-VALUES
-  (4, 'fernet dia 1', 5, 7000.00, 35000.00, '2023-10-21');
-INSERT INTO
-  `compra` (
-    `id`,
-    `producto`,
-    `cantidad`,
-    `precio_unitario`,
-    `total`,
-    `fecha`
-  )
-VALUES
-  (5, 'vino', 12, 600.00, 7200.00, '2023-10-19');
-INSERT INTO
-  `compra` (
-    `id`,
-    `producto`,
-    `cantidad`,
-    `precio_unitario`,
-    `total`,
-    `fecha`
-  )
-VALUES
-  (6, 'fernet dia 1', 5, 6900.00, 34500.00, '2023-11-29');
-INSERT INTO
-  `compra` (
-    `id`,
-    `producto`,
-    `cantidad`,
-    `precio_unitario`,
-    `total`,
-    `fecha`
-  )
-VALUES
-  (
-    7,
-    'fernet dia 3',
-    20,
-    3000.00,
-    60000.00,
-    '2023-11-28'
-  );
-INSERT INTO
-  `compra` (
-    `id`,
-    `producto`,
-    `cantidad`,
-    `precio_unitario`,
-    `total`,
-    `fecha`
-  )
-VALUES
-  (8, 'dia backup', 12, 2.00, 24.00, '2023-12-20');
-INSERT INTO
-  `compra` (
-    `id`,
-    `producto`,
-    `cantidad`,
-    `precio_unitario`,
-    `total`,
-    `fecha`
-  )
-VALUES
-  (9, 'back up 2', 2, 2.00, 4.00, '2023-12-16');
-INSERT INTO
-  `compra` (
-    `id`,
-    `producto`,
-    `cantidad`,
-    `precio_unitario`,
-    `total`,
-    `fecha`
-  )
-VALUES
-  (
-    10,
-    'cerrar sesionmmmmmmmmmmmmmmmmmmmm',
-    8,
-    2.00,
-    16.00,
-    '2023-12-20'
-  );
-INSERT INTO
-  `compra` (
-    `id`,
-    `producto`,
-    `cantidad`,
-    `precio_unitario`,
-    `total`,
-    `fecha`
-  )
-VALUES
-  (11, 'backu´´p ', 4, 10.00, 40.00, '2023-12-20');
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: enproduccion
 # ------------------------------------------------------------
 
-INSERT INTO
-  `enproduccion` (`id`, `nombre`, `stock`, `fecha`)
-VALUES
-  (9, 'back up 2', 70, '2024-02-12');
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: hilado
 # ------------------------------------------------------------
 
-INSERT INTO
-  `hilado` (
-    `id`,
-    `producto_terminado`,
-    `color`,
-    `stock_loberia`,
-    `stock_buenosAires`,
-    `precio_venta_mayorista`,
-    `precio_venta_minorista`
-  )
-VALUES
-  (1, 'pt dia 1', 'negro', 348, 401, 1000.00, 1500.00);
-INSERT INTO
-  `hilado` (
-    `id`,
-    `producto_terminado`,
-    `color`,
-    `stock_loberia`,
-    `stock_buenosAires`,
-    `precio_venta_mayorista`,
-    `precio_venta_minorista`
-  )
-VALUES
-  (2, 'pt2 dia 1', 'gris', 1, 40, 4000.00, 4500.00);
-INSERT INTO
-  `hilado` (
-    `id`,
-    `producto_terminado`,
-    `color`,
-    `stock_loberia`,
-    `stock_buenosAires`,
-    `precio_venta_mayorista`,
-    `precio_venta_minorista`
-  )
-VALUES
-  (3, 'sdadas', 'sdadsa', 3, 4, 344.00, 433.00);
-INSERT INTO
-  `hilado` (
-    `id`,
-    `producto_terminado`,
-    `color`,
-    `stock_loberia`,
-    `stock_buenosAires`,
-    `precio_venta_mayorista`,
-    `precio_venta_minorista`
-  )
-VALUES
-  (
-    4,
-    'fsdfsdfdsfs',
-    'dfsdfsd',
-    7,
-    0,
-    44344.00,
-    3434343.00
-  );
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: materia_prima
 # ------------------------------------------------------------
 
-INSERT INTO
-  `materia_prima` (`id`, `nombre`, `precio`, `stock`)
-VALUES
-  (1, 'fernet dia 1', 6900.00, 15);
-INSERT INTO
-  `materia_prima` (`id`, `nombre`, `precio`, `stock`)
-VALUES
-  (4, 'fernet dia 3', 3000.00, 15);
-INSERT INTO
-  `materia_prima` (`id`, `nombre`, `precio`, `stock`)
-VALUES
-  (5, 'dia backup', 2.00, 10);
-INSERT INTO
-  `materia_prima` (`id`, `nombre`, `precio`, `stock`)
-VALUES
-  (6, 'back up 2', 2.00, 30);
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: role
@@ -453,7 +187,7 @@ VALUES
   (
     1,
     'santiago',
-    '$2a$08$bnSM5bloOLHUKEU8SvhfBuiDSV0WKKutxAQwZlodQJGrqcgr4jDZu',
+    '$2a$08$MEU2uN/3WAoyA48c0chb.eRwZ0wDbznS6J6jWfbOp7sl8GYyOY1gm',
     'santiago',
     'santiago@santiago.com'
   );
@@ -471,108 +205,6 @@ VALUES
 # DATA DUMP FOR TABLE: venta
 # ------------------------------------------------------------
 
-INSERT INTO
-  `venta` (
-    `id`,
-    `producto_id`,
-    `nombre_prod`,
-    `color`,
-    `cantidad_vendida`,
-    `precio`,
-    `stock_origen`,
-    `tipo_venta`,
-    `fecha`,
-    `cliente`,
-    `medio_pago`,
-    `direccion`,
-    `email`,
-    `telefono`
-  )
-VALUES
-  (
-    1,
-    2,
-    'pt2 dia 1',
-    'gris',
-    49,
-    196000.00,
-    'stock_loberia',
-    'precio_venta_mayorista',
-    '2023-10-22',
-    'cliente dia 1',
-    'mercado pago',
-    'las heras 219',
-    'cristian@cristian.com',
-    ''
-  );
-INSERT INTO
-  `venta` (
-    `id`,
-    `producto_id`,
-    `nombre_prod`,
-    `color`,
-    `cantidad_vendida`,
-    `precio`,
-    `stock_origen`,
-    `tipo_venta`,
-    `fecha`,
-    `cliente`,
-    `medio_pago`,
-    `direccion`,
-    `email`,
-    `telefono`
-  )
-VALUES
-  (
-    2,
-    4,
-    'fsdfsdfdsfs',
-    'dfsdfsd',
-    70,
-    99999999.99,
-    'stock_loberia',
-    'precio_venta_minorista',
-    '2024-02-12',
-    'qqqqqqqqqqqqq',
-    'mercado pago',
-    'calle arboleda 664',
-    'cristian@cristian.com',
-    '123-543-5757'
-  );
-INSERT INTO
-  `venta` (
-    `id`,
-    `producto_id`,
-    `nombre_prod`,
-    `color`,
-    `cantidad_vendida`,
-    `precio`,
-    `stock_origen`,
-    `tipo_venta`,
-    `fecha`,
-    `cliente`,
-    `medio_pago`,
-    `direccion`,
-    `email`,
-    `telefono`
-  )
-VALUES
-  (
-    3,
-    1,
-    'pt dia 1',
-    'negro',
-    1,
-    1000.00,
-    'stock_loberia',
-    'precio_venta_mayorista',
-    '2024-02-12',
-    'xxxa',
-    'tienda nube',
-    'direc nueva',
-    'cristian@cristian.com',
-    '2262570382'
-  );
 
 # ------------------------------------------------------------
 # TRIGGER DUMP FOR: tr_compra_actualizarMateriaPrima
@@ -583,7 +215,7 @@ DELIMITER ;;
 CREATE TRIGGER tr_compra_actualizarMateriaPrima 
                     AFTER INSERT ON compra FOR EACH ROW
                     BEGIN
-                    DECLARE stock_diff INT;
+                    DECLARE stock_diff DECIMAL(10, 3);
                     SET stock_diff = NEW.cantidad;
   
                     IF EXISTS (SELECT 1 FROM materia_prima WHERE nombre = NEW.producto) THEN

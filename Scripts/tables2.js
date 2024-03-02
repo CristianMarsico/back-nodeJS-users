@@ -39,7 +39,7 @@ const tables = [
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         nombre VARCHAR(50) NOT NULL,
                         precio DECIMAL(10, 2) NOT NULL,
-                        stock INT NOT NULL
+                        stock DECIMAL(10, 3) NOT NULL
                     )`
     }
     ,
@@ -49,7 +49,7 @@ const tables = [
                     CREATE TABLE IF NOT EXISTS enProduccion(
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         nombre VARCHAR(50) NOT NULL,
-                        stock INT NOT NULL,
+                        stock DECIMAL(10, 3) NOT NULL,
                         fecha DATE NOT NULL
                     )`
     }
@@ -60,7 +60,7 @@ const tables = [
                     CREATE TABLE IF NOT EXISTS compra(
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         producto VARCHAR(50) NOT NULL,
-                        cantidad INT NOT NULL,
+                        cantidad DECIMAL(10, 3) NOT NULL,
                         precio_unitario DECIMAL(10, 2) NOT NULL,
                         total DECIMAL(10, 2) NOT NULL,
                         fecha DATE NOT NULL
@@ -74,8 +74,8 @@ const tables = [
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         producto_terminado VARCHAR(150) NOT NULL,
                         color VARCHAR(50) NOT NULL,
-                        stock_loberia INT NOT NULL,
-                        stock_buenosAires INT NOT NULL,
+                        stock_loberia DECIMAL(10, 3) NOT NULL,
+                        stock_buenosAires DECIMAL(10, 3) NOT NULL,
                         precio_venta_mayorista DECIMAL(10, 2) NOT NULL,
                         precio_venta_minorista DECIMAL(10, 2) NOT NULL
                     )`
@@ -89,7 +89,7 @@ const tables = [
                         producto_id INT NOT NULL,
                         nombre_prod VARCHAR(100) NOT NULL,
                         color VARCHAR(100) NOT NULL,
-                        cantidad_vendida INT NOT NULL,
+                        cantidad_vendida DECIMAL(10, 3) NOT NULL,
                         precio DECIMAL(10, 2) NOT NULL,
                         stock_origen ENUM('stock_loberia', 'stock_buenosAires') NOT NULL,
                         tipo_venta ENUM('precio_venta_mayorista', 'precio_venta_minorista') NOT NULL,

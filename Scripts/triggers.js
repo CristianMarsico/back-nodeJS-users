@@ -24,7 +24,7 @@ const triggers = [
                    CREATE TRIGGER tr_compra_actualizarMateriaPrima 
                     AFTER INSERT ON compra FOR EACH ROW
                     BEGIN
-                    DECLARE stock_diff INT;
+                    DECLARE stock_diff DECIMAL(10, 3);
                     SET stock_diff = NEW.cantidad;
   
                     IF EXISTS (SELECT 1 FROM materia_prima WHERE nombre = NEW.producto) THEN

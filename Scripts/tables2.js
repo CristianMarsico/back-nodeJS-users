@@ -114,6 +114,17 @@ const tables = [
                         telefono VARCHAR(100) NULL
                     )`
     }
+    ,
+    {
+        name: 'comentario',
+        definition: `
+                     CREATE TABLE IF NOT EXISTS comentario (
+                        id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+                        comentario VARCHAR(250) NOT NULL,
+                        id_cliente INT NOT NULL,
+                        FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
+                    )`
+    }
 
 
 ];

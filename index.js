@@ -92,7 +92,7 @@ app.use('/api', require('./routes/ventaRouter.js'));
 app.use('/api', require('./routes/hiladoRouter.js'));
 app.use('/api', require('./routes/clienteRouter.js'));
 app.use('/api', require('./routes/enProduccion.js'));
-
+app.use('/api', require('./routes/comentarioRouter.js'));
 
 
 const PORT = process.env.PORT || 3000;
